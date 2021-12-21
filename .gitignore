@@ -1,0 +1,11 @@
+.DS_Store
+.vscode
+.vs
+bin
+bin/src
+bin/src/*
+bin/src/*.o
+.build-cache
+test.bc
+.dll
+.so
