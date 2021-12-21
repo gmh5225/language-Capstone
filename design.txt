@@ -1,0 +1,7 @@
+Design Decisions
+================
+"var x" vs "x :=" for type inference
+"var" vs "any" vs "auto" vs "let"
+short versions of "public, private, property, protected"
+"fn" vs "fun" vs "func" vs "function"
+"extends" vs ":" vs "<-" vs "->"
