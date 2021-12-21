@@ -75,6 +75,11 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_OREQUAL: return "|=";
     case TOK_OROR: return "||";
     case TOK_XOREQUAL: return "^=";
+    case TOK_COLONCOLON: return "::";
+    case TOK_LSINGLEARROW: return "<-";
+    case TOK_RSINGLEARROW: return "->";
+    case TOK_RDOUBLEARROW: return "=>";
+    case TOK_SPACESHIP: return "<=>";
 
     case TOK_R_IF: return "if";
     case TOK_R_ELSE: return "else";
@@ -83,13 +88,23 @@ std::string Lexer::getTokenStr(int token) {
     //case TOK_R_BREAK: return "break";
     //case TOK_R_CONTINUE: return "continue";
     case TOK_R_FUNC: return "func";
-    case TOK_R_CLASS: return "class";
     case TOK_R_RETURN: return "return";
+
+    case TOK_R_CLASS: return "class";
+    case TOK_R_PUBLIC: return "public";
+    case TOK_R_PRIVATE: return "private";
+    case TOK_R_GET: return "get";
+    case TOK_R_SET: return "set";
+    case TOK_R_FINAL: return "final";
+
+    case TOK_R_VAR: return "var";
     case TOK_R_TRUE: return "true";
     case TOK_R_FALSE: return "false";
     case TOK_R_NULL: return "null";
     case TOK_R_NEW: return "new";
     case TOK_R_CONST: return "const";
+    case TOK_R_IMPORT: return "import";
+
     }
 
     return "?[" + std::to_string(token) + "]";
@@ -152,6 +167,20 @@ void Lexer::getNextToken() {
             tk = TOK_R_FUNC;
         else if (tkStr == "return")
             tk = TOK_R_RETURN;
+        else if (tkStr == "class")
+            tk = TOK_R_CLASS;
+        else if (tkStr == "public")
+            tk = TOK_R_PUBLIC;
+        else if (tkStr == "private")
+            tk = TOK_R_PRIVATE;
+        else if (tkStr == "get")
+            tk = TOK_R_GET;
+        else if (tkStr == "set")
+            tk = TOK_R_SET;
+        else if (tkStr == "final")
+            tk = TOK_R_FINAL;
+        else if (tkStr == "var")
+            tk = TOK_R_VAR;
         else if (tkStr == "true")
             tk = TOK_R_TRUE;
         else if (tkStr == "false")
@@ -162,6 +191,8 @@ void Lexer::getNextToken() {
             tk = TOK_R_NEW;
         else if (tkStr == "const")
             tk = TOK_R_CONST;
+        else if (tkStr == "import")
+            tk = TOK_R_IMPORT;
 
     } else if (isNumeric(currCh)) {
         bool isHex = false;
@@ -331,6 +362,15 @@ void Lexer::getNextToken() {
             getNextCh();
         } else if (tk == '^' && currCh == '=') {
             tk = TOK_XOREQUAL;
+            getNextCh();
+        } else if (tk == '-' && currCh == '>') {
+            tk = TOK_RSINGLEARROW;
+            getNextCh();
+        } else if (tk == '<' && currCh == '-') {
+            tk = TOK_LSINGLEARROW;
+            getNextCh();
+        } else if (tk == ':' && currCh == ':') {
+            tk = TOK_COLONCOLON;
             getNextCh();
         }
     }
