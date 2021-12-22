@@ -421,8 +421,7 @@ std::string Lexer::getPosition(int pos) {
     return buf;
 }
 
-std::string Lexer::nextToken() {
+int Lexer::nextToken() {
     getNextToken();
-    //return getSubString(tokenLastEnd);
-    return getTokenStr(tk);
+    return tk;
 }

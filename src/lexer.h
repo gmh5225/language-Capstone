@@ -26,7 +26,8 @@ class Lexer {
 
     std::string getPosition(int pos = -1);
 
-    std::string nextToken();
+    std::string nextTokenString();
+    int nextToken();
 
   protected:
     char* data;

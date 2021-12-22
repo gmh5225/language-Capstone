@@ -1,0 +1,33 @@
+// A simple example of my compiled language
+
+import stdio
+
+class Person : Animal {
+  private get u32 age = 0;
+  private get set f64 distance = 0;
+  public final legs;
+   
+  public func new(f64 distance_, u32 age_, u8 legs_) {
+    age = age_;
+    distance = distance_;
+    legs = legs_;
+  } 
+
+  public func getAge() String {
+    return String("is ", age, " years old");
+  }
+  
+  public func walk(f64 distance_) {
+    distance += distance_;
+  }
+
+  public func birthday() { age++; }
+}
+
+func main(String[] args) i32 {
+  var bob = Person(0, 16, 2);
+  bob.birthday();
+  bob.walk(10);
+  stdio::printf("bob %s, has %d legs, and has gone %f meters\n",
+      bob.getAge(), bob.getDistance(), bob.legs);
+}

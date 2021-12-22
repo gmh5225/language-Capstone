@@ -8,10 +8,15 @@ int main(int argc, char** argv) {
 
     try {
         auto lex = new Lexer(readFile(argv[1]));
-        while (lex->tk) {
-            std::cout << lex->getPosition() << ": " << Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr << std::endl;
-            lex->nextToken();
-        }
+        // while (lex->tk) {
+        //     std::cout << lex->getPosition() << ": " << Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr << std::endl;
+        //     lex->getNextToken();
+        // }
+
+        auto parser = new Parser(lex);
+        auto ast = parser->parse();
+        std::cout << ast->asString() << '\n';
+
     } catch (Exception* e) { 
         std::printf("ERROR: %s\n", e->text.c_str()); 
     }
