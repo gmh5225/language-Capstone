@@ -14,6 +14,7 @@
 class AST {
 public:
     virtual std::string asString() = 0;
+    virtual std::string asXML() = 0;
 };
 
 class BinaryOperator : public AST {
@@ -25,6 +26,7 @@ public:
     int op;
 
     std::string asString();
+    std::string asXML();
 };
 
 class FunctionCall : public AST {
@@ -35,6 +37,8 @@ public:
     std::vector<AST*> args;
 
     std::string asString();
+    std::string asXML();
+
 };
 
 class NumberLiteral : public AST {
@@ -43,6 +47,25 @@ public:
     std::string literal;
 
     std::string asString();
+    std::string asXML();
+};
+
+class StringLiteral : public AST {
+public:
+    StringLiteral(std::string literal);
+    std::string literal;
+
+    std::string asString();
+    std::string asXML();
+};
+
+class BooleanLiteral : public AST {
+public:
+    BooleanLiteral(std::string literal);
+    std::string literal;
+
+    std::string asString();
+    std::string asXML();
 };
 
 class VariableIdentifier : public AST {
@@ -51,6 +74,7 @@ public:
     std::string name;
 
     std::string asString();
+    std::string asXML();
 };
 
 class TypeIdentifier : public AST {
@@ -59,6 +83,7 @@ public:
     std::string name;
 
     std::string asString();
+    std::string asXML();
 };
 
 class VariableAssignment : public AST {
@@ -70,6 +95,7 @@ public:
     AST* value;
 
     std::string asString();
+    std::string asXML();
 };
 
 class VariableReAssignment : public AST {
@@ -81,6 +107,7 @@ public:
     AST* value;
 
     std::string asString();
+    std::string asXML();
 };
 
 class Block : public AST {
@@ -90,6 +117,7 @@ public:
     std::vector<AST*> statements;
 
     std::string asString();
+    std::string asXML();
 };
 
 class Parser {
@@ -99,8 +127,10 @@ private:
     AST* factor();
     AST* functionCall();
     AST* functionCall(VariableIdentifier* callback);
-    AST* term();
-    AST* expression();
+    AST* multExpression();
+    AST* addExpression();
+    AST* logicalExpression();
+    AST* condExpression();
     AST* statement();
     AST* block();
 

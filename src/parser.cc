@@ -8,6 +8,34 @@ std::string NumberLiteral::asString() {
     return "NumberLiteral〈" + literal + "〉";
 }
 
+std::string NumberLiteral::asXML() {
+    return "<NumberLiteral>" + literal + "</NumberLiteral>";
+}
+
+StringLiteral::StringLiteral(std::string literal) {
+    this->literal = literal;
+}
+
+std::string StringLiteral::asString() {
+    return "StringLiteral〈" + safeLiterals(literal) + "〉";
+}
+
+std::string StringLiteral::asXML() {
+    return "<StringLiteral>" + safeLiterals(literal) + "</StringLiteral>";
+}
+
+BooleanLiteral::BooleanLiteral(std::string literal) {
+    this->literal = literal;
+}
+
+std::string BooleanLiteral::asString() {
+    return "BooleanLiteral〈" + safeLiterals(literal) + "〉";
+}
+
+std::string BooleanLiteral::asXML() {
+    return "<BooleanLiteral>" + safeLiterals(literal) + "</BooleanLiteral>";
+}
+
 VariableIdentifier::VariableIdentifier(std::string name) {
     this->name = name;
 }
@@ -16,12 +44,20 @@ std::string VariableIdentifier::asString() {
     return "VariableIdentifier〈" + name + "〉";
 }
 
+std::string VariableIdentifier::asXML() {
+    return "<VariableIdentifier>" + name + "</VariableIdentifier>";
+}
+
 TypeIdentifier::TypeIdentifier(std::string name) {
     this->name = name;
 }
 
 std::string TypeIdentifier::asString() {
     return "TypeIdentifier〈" + name + "〉";
+}
+
+std::string TypeIdentifier::asXML() {
+    return "<TypeIdentifier>" + name + "</TypeIdentifier>";
 }
 
 BinaryOperator::BinaryOperator(AST* left, AST* right, int op) {
@@ -36,6 +72,12 @@ std::string BinaryOperator::asString() {
             + right->asString() + "〉";
 }
 
+std::string BinaryOperator::asXML() {
+    return "<BinaryOperation>" + left->asXML() + "<Operator>" 
+            + Lexer::getTokenStr(op) + "</Operator>" + right->asXML() 
+            + "</BinaryOperation>";
+}
+
 FunctionCall::FunctionCall(std::string callback, std::vector<AST*> args) {
     this->callback = callback;
     this->args = args;
@@ -48,6 +90,14 @@ std::string FunctionCall::asString() {
     return rep + "〉〉";
 }
 
+std::string FunctionCall::asXML() {
+    std::string rep = "<FunctionCall><Callback>" 
+            + callback + "</Callback><Args>";
+    for (AST* arg : args)
+        rep += "<Arg>" + arg->asXML() + "</Arg>";
+    return rep + "</Args></FunctionCall>";
+}
+
 VariableAssignment::VariableAssignment(std::string type, std::string name, AST* value) {
     this->type = type;
     this->name = name;
@@ -56,6 +106,11 @@ VariableAssignment::VariableAssignment(std::string type, std::string name, AST* 
 
 std::string VariableAssignment::asString() {
     return "VariableAssignment〈" + type + " " + name + " " + value->asString() + "〉";
+}
+
+std::string VariableAssignment::asXML() {
+    return "<VariableAssignment><Type>" + type + "</Type><Name>" + name 
+            + "</Name><Operator>'='</Operator>" + value->asXML() + "</VariableAssignment>";
 }
 
 VariableReAssignment::VariableReAssignment(int op, std::string name, AST* value) {
@@ -69,6 +124,12 @@ std::string VariableReAssignment::asString() {
             + " " + value->asString() + "〉";
 }
 
+std::string VariableReAssignment::asXML() {
+    return "<VariableReAssignment><Name>" + name + "</Name><Operator>" 
+            + Lexer::getTokenStr(op) + "</Operator>" + value->asXML() 
+            + "</VariableReAssignment>";
+}
+
 Block::Block(std::vector<AST*> statements) {
     this->statements = statements;
 }
@@ -78,6 +139,13 @@ std::string Block::asString() {
     for (AST* statement : this->statements) 
         rep += "  " + statement->asString() + " ;\n";
     return rep + "〉";
+}
+
+std::string Block::asXML() {
+    std::string rep = "<Block>";
+    for (AST* statement : this->statements) 
+        rep += statement->asXML();
+    return rep + "</Block>";
 }
 
 Parser::Parser(Lexer* lexer) {
@@ -93,6 +161,18 @@ AST* Parser::factor() {
         NumberLiteral* num = new NumberLiteral(lexer->tkStr);
         lexer->match(TOK_FLOAT);
         return num;
+    } else if (lexer->tk == TOK_STR) {
+        StringLiteral* str = new StringLiteral(lexer->tkStr);
+        lexer->match(TOK_STR);
+        return str;
+    } else if (lexer->tk == TOK_R_TRUE) {
+        BooleanLiteral* boolean = new BooleanLiteral("1");
+        lexer->match(TOK_R_TRUE);
+        return boolean;
+    } else if (lexer->tk == TOK_R_FALSE) {
+        BooleanLiteral* boolean = new BooleanLiteral("0");
+        lexer->match(TOK_R_FALSE);
+        return boolean;
     } else if (lexer->tk == TOK_ID) {
         VariableIdentifier* id = new VariableIdentifier(lexer->tkStr);
         lexer->match(TOK_ID);
@@ -101,7 +181,7 @@ AST* Parser::factor() {
         return id;
     } else if (lexer->tk == '(') {
         lexer->match('(');
-        AST* expr = expression();
+        AST* expr = condExpression();
         lexer->match(')');
         return expr;
     } else {
@@ -113,10 +193,10 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
     std::vector<AST*> args;
     lexer->match('(');
     if (lexer->tk != ')') {
-        args.push_back(expression());
+        args.push_back(addExpression());
         while (lexer->tk == ',') {
             lexer->match(',');
-            args.push_back(expression());
+            args.push_back(addExpression());
         }
     }
     lexer->match(')');
@@ -129,17 +209,17 @@ AST* Parser::functionCall() {
     lexer->match('(');
     std::vector<AST*> args;
     if (lexer->tk != ')') {
-        args.push_back(expression());
+        args.push_back(condExpression());
         while (lexer->tk == ',') {
             lexer->match(',');
-            args.push_back(expression());
+            args.push_back(condExpression());
         }
     }
     lexer->match(')');
     return new FunctionCall(callback, args);
 }
 
-AST* Parser::term() {
+AST* Parser::multExpression() {
     AST* node = factor();
     while (lexer->tk == '*' || lexer->tk == '/' || lexer->tk == '%') {
         int op = lexer->tk;
@@ -150,20 +230,54 @@ AST* Parser::term() {
     return node;
 }
 
-AST* Parser::expression() {
-    AST* node = term();
+AST* Parser::addExpression() {
+    AST* node = multExpression();
     while (lexer->tk == '+' || lexer->tk == '-') {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        AST* right = term();
+        AST* right = multExpression();
         node = new BinaryOperator(node, right, op); 
     }
     return node;
 }
 
+AST* Parser::logicalExpression() {
+    AST* node = condExpression();
+    while (lexer->tk == TOK_ANDAND
+            || lexer->tk == TOK_OROR
+            || lexer->tk == '^'
+    ) {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = condExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+AST* Parser::condExpression() {
+    AST* node = logicalExpression();
+    while (lexer->tk == TOK_EQUAL 
+            || lexer->tk == '>'
+            || lexer->tk == '<'
+            || lexer->tk == TOK_GEQUAL
+            || lexer->tk == TOK_LEQUAL
+            || lexer->tk == TOK_NEQUAL
+    ) {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = logicalExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+
 AST* Parser::statement() {
-    if (lexer->tk != TOK_ID)
+    if (lexer->tk != TOK_ID) {
         throw new Exception("Expected some sort of identifier");
+        return (AST*) NULL;
+    }
 
     VariableIdentifier* node = new VariableIdentifier(lexer->tkStr);
     lexer->match(lexer->tk);
@@ -180,12 +294,12 @@ AST* Parser::statement() {
     ) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        return new VariableReAssignment(op, node->name, expression()); 
+        return new VariableReAssignment(op, node->name, condExpression()); 
     } else if (lexer->tk == TOK_ID) {
         std::string name = lexer->tkStr; 
         lexer->match(lexer->tk);
         lexer->match('=');
-        return new VariableAssignment(node->name, name, expression());
+        return new VariableAssignment(node->name, name, condExpression());
     }
 }
 

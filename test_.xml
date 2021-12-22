@@ -1,0 +1,29 @@
+<Block>
+    <VariableAssignment>
+        <Type>u1</Type>
+        <Name>x</Name>
+        <Operator>'='</Operator>
+        <BooleanLiteral>0</BooleanLiteral>
+    </VariableAssignment>
+    <FunctionCall>
+        <Callback>print</Callback>
+        <Args>
+            <Arg>
+                <VariableIdentifier>x</VariableIdentifier>
+            </Arg>
+        </Args>
+    </FunctionCall>
+    <VariableReAssignment>
+        <Name>x</Name>
+        <Operator>'='</Operator>
+        <BooleanLiteral>1</BooleanLiteral>
+    </VariableReAssignment>
+    <FunctionCall>
+        <Callback>print</Callback>
+        <Args>
+            <Arg>
+                <VariableIdentifier>x</VariableIdentifier>
+            </Arg>
+        </Args>
+    </FunctionCall>
+</Block>

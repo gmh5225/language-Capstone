@@ -7,7 +7,10 @@ int main(int argc, char** argv) {
     }
 
     try {
-        auto lex = new Lexer(readFile(argv[1]));
+        std::string fileName = argv[1];
+        std::string rootName = fileName.substr(0, fileName.find_last_of('.'));
+
+        auto lex = new Lexer(readFile(fileName));
         // while (lex->tk) {
         //     std::cout << lex->getPosition() << ": " << Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr << std::endl;
         //     lex->getNextToken();
@@ -15,7 +18,7 @@ int main(int argc, char** argv) {
 
         auto parser = new Parser(lex);
         auto ast = parser->parse();
-        std::cout << ast->asString() << '\n';
+        dumpXML(rootName + ".xml", ast->asXML());
 
     } catch (Exception* e) { 
         std::printf("ERROR: %s\n", e->text.c_str()); 

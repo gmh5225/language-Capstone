@@ -49,6 +49,7 @@ enum TOKEN_TYPES {
     TOK_R_FUNC,
     TOK_R_RETURN,
 
+
     TOK_R_CLASS,
     TOK_R_PUBLIC,
     TOK_R_PRIVATE,

@@ -51,4 +51,8 @@ std::string replaceAllStringInString(std::string subject,
 
 std::string stripWhitespace(const std::string& subject);
 
+void dumpXML(const std::string& filename, const std::string& xml);
+
+std::string safeLiterals(const std::string& str);
+
 #endif

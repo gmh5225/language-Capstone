@@ -14,7 +14,8 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=gnu++$(CPP_V)
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=gnu++$(CPP_V) 
+
 
 ifeq ($(UNAME),MINGW64_NT-10.0-19043)
 	LDFALGS ?= -L/c/MinGW/msys/1.0/lib/libdl.a
