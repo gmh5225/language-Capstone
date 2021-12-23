@@ -1,2 +1,0 @@
-u1 x = y == (a || b && c ^ d);
-print(x);

@@ -242,14 +242,14 @@ AST* Parser::addExpression() {
 }
 
 AST* Parser::logicalExpression() {
-    AST* node = condExpression();
+    AST* node = addExpression();
     while (lexer->tk == TOK_ANDAND
             || lexer->tk == TOK_OROR
             || lexer->tk == '^'
     ) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        AST* right = condExpression();
+        AST* right = addExpression();
         node = new BinaryOperator(node, right, op); 
     }
     return node;
