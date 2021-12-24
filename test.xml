@@ -1,0 +1,37 @@
+<Block>
+    <VariableAssignment>
+        <Type>i32</Type>
+        <Name>x</Name>
+        <Operator>'='</Operator>
+        <BinaryOperation>
+            <NumberLiteral>9</NumberLiteral>
+            <Operator>'+'</Operator>
+            <NumberLiteral>10</NumberLiteral>
+        </BinaryOperation>
+    </VariableAssignment>
+    <VariableReAssignment>
+        <Name>x</Name>
+        <Operator>'='</Operator>
+        <FunctionCall>
+            <Callback>f</Callback>
+            <Args>
+                <Arg>
+                    <VariableIdentifier>x</VariableIdentifier>
+                </Arg>
+            </Args>
+        </FunctionCall>
+    </VariableReAssignment>
+    <VariableReAssignment>
+        <Name>x</Name>
+        <Operator>+=</Operator>
+        <NumberLiteral>10</NumberLiteral>
+    </VariableReAssignment>
+    <FunctionCall>
+        <Callback>print</Callback>
+        <Args>
+            <Arg>
+                <VariableIdentifier>x</VariableIdentifier>
+            </Arg>
+        </Args>
+    </FunctionCall>
+</Block>

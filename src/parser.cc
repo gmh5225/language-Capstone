@@ -181,7 +181,7 @@ AST* Parser::factor() {
         return id;
     } else if (lexer->tk == '(') {
         lexer->match('(');
-        AST* expr = condExpression();
+        AST* expr = logicalOrExpression();
         lexer->match(')');
         return expr;
     } else {
@@ -193,10 +193,10 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
     std::vector<AST*> args;
     lexer->match('(');
     if (lexer->tk != ')') {
-        args.push_back(addExpression());
+        args.push_back(logicalOrExpression());
         while (lexer->tk == ',') {
             lexer->match(',');
-            args.push_back(addExpression());
+            args.push_back(logicalOrExpression());
         }
     }
     lexer->match(')');
@@ -209,17 +209,20 @@ AST* Parser::functionCall() {
     lexer->match('(');
     std::vector<AST*> args;
     if (lexer->tk != ')') {
-        args.push_back(condExpression());
+        args.push_back(logicalOrExpression());
         while (lexer->tk == ',') {
             lexer->match(',');
-            args.push_back(condExpression());
+            args.push_back(logicalOrExpression());
         }
     }
     lexer->match(')');
     return new FunctionCall(callback, args);
 }
 
-AST* Parser::multExpression() {
+//AST* Parser::unaryExpression() {}
+
+
+AST* Parser::multiplicativeExpression() {
     AST* node = factor();
     while (lexer->tk == '*' || lexer->tk == '/' || lexer->tk == '%') {
         int op = lexer->tk;
@@ -230,48 +233,121 @@ AST* Parser::multExpression() {
     return node;
 }
 
-AST* Parser::addExpression() {
-    AST* node = multExpression();
+AST* Parser::additiveExpression() {
+    AST* node = multiplicativeExpression();
     while (lexer->tk == '+' || lexer->tk == '-') {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        AST* right = multExpression();
+        AST* right = multiplicativeExpression();
         node = new BinaryOperator(node, right, op); 
     }
     return node;
 }
 
-AST* Parser::logicalExpression() {
-    AST* node = addExpression();
-    while (lexer->tk == TOK_ANDAND
-            || lexer->tk == TOK_OROR
-            || lexer->tk == '^'
-    ) {
+
+AST* Parser::shiftExpression() {
+    AST* node = additiveExpression();
+    while (lexer->tk == TOK_RSHIFT 
+            || lexer->tk == TOK_LSHIFT) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        AST* right = addExpression();
+        AST* right = additiveExpression();
         node = new BinaryOperator(node, right, op); 
     }
     return node;
 }
 
-AST* Parser::condExpression() {
-    AST* node = logicalExpression();
-    while (lexer->tk == TOK_EQUAL 
+
+
+AST* Parser::relationalExpression() {
+    AST* node = shiftExpression();
+    while (lexer->tk == TOK_SPACESHIP
             || lexer->tk == '>'
             || lexer->tk == '<'
             || lexer->tk == TOK_GEQUAL
             || lexer->tk == TOK_LEQUAL
-            || lexer->tk == TOK_NEQUAL
     ) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        AST* right = logicalExpression();
+        AST* right = shiftExpression();
         node = new BinaryOperator(node, right, op); 
     }
     return node;
 }
 
+
+AST* Parser::equalityExpression() {
+    AST* node = relationalExpression();
+    while (lexer->tk == TOK_EQUAL
+            || lexer->tk == TOK_NEQUAL
+    ) {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = relationalExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+
+AST* Parser::bitwiseAndExpression() {
+    AST* node = equalityExpression();
+    while (lexer->tk == '&') {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = equalityExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+
+AST* Parser::bitwiseXorExpression() {
+    AST* node = bitwiseAndExpression();
+    while (lexer->tk == '^') {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = bitwiseAndExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+
+
+AST* Parser::bitwiseOrExpression() {
+    AST* node = bitwiseXorExpression();
+    while (lexer->tk == '|') {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = bitwiseXorExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+
+AST* Parser::logicalAndExpression() {
+    AST* node = bitwiseOrExpression();
+    while (lexer->tk == TOK_ANDAND) {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = bitwiseOrExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
+
+AST* Parser::logicalOrExpression() {
+    AST* node = logicalAndExpression();
+    while (lexer->tk == TOK_OROR) {
+        int op = lexer->tk;
+        lexer->match(lexer->tk);
+        AST* right = logicalAndExpression();
+        node = new BinaryOperator(node, right, op); 
+    }
+    return node;
+}
 
 AST* Parser::statement() {
     if (lexer->tk != TOK_ID) {
@@ -291,15 +367,20 @@ AST* Parser::statement() {
         || lexer->tk == TOK_TIMESEQUAL
         || lexer->tk == TOK_DIVIDEEQUAL
         || lexer->tk == TOK_MODEQUAL
+        || lexer->tk == TOK_LSHIFTEQUAL
+        || lexer->tk == TOK_RSHIFTEQUAL
+        || lexer->tk == TOK_ANDEQUAL
+        || lexer->tk == TOK_OREQUAL
+        || lexer->tk == TOK_XOREQUAL
     ) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        return new VariableReAssignment(op, node->name, condExpression()); 
+        return new VariableReAssignment(op, node->name, logicalOrExpression()); 
     } else if (lexer->tk == TOK_ID) {
         std::string name = lexer->tkStr; 
         lexer->match(lexer->tk);
         lexer->match('=');
-        return new VariableAssignment(node->name, name, condExpression());
+        return new VariableAssignment(node->name, name, logicalOrExpression());
     }
 }
 

@@ -1,6 +1,10 @@
-add conditional expressions
+finish operators
+
+add ternary
 add if / else
 add while loops
 add for loops
+add list parsing
 add function definitions
+add generic parsing
 add class definitions

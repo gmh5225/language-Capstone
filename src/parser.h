@@ -127,11 +127,26 @@ private:
     AST* factor();
     AST* functionCall();
     AST* functionCall(VariableIdentifier* callback);
-    AST* multExpression();
-    AST* addExpression();
-    AST* logicalExpression();
-    AST* condExpression();
+
+    AST* multiplicativeExpression();
+
+    AST* additiveExpression();
+
+    AST* shiftExpression();
+
+    AST* relationalExpression();
+
+    AST* equalityExpression();
+
+    AST* bitwiseAndExpression();
+    AST* bitwiseXorExpression();
+    AST* bitwiseOrExpression();
+
+    AST* logicalAndExpression();
+    AST* logicalOrExpression();
+
     AST* statement();
+
     AST* block();
 
 public:
