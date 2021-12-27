@@ -40,7 +40,7 @@ bool isIdentString(const char* s) {
     return true;
 }
 
-void replace(std::string& str, char textFrom, const char* textTo) {
+void replace(std::string str, char textFrom, const char* textTo) {
     int sLen = strlen(textTo);
     size_t p = str.find(textFrom);
     while (p != std::string::npos) {

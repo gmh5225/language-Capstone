@@ -5,7 +5,7 @@
 
 #include "parser.h"
 
-NumberLiteral::NumberLiteral(std::string literal) {
+NumberLiteral::NumberLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
@@ -17,7 +17,7 @@ std::string NumberLiteral::asXML() {
     return "<NumberLiteral>" + literal + "</NumberLiteral>";
 }
 
-StringLiteral::StringLiteral(std::string literal) {
+StringLiteral::StringLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
@@ -29,7 +29,7 @@ std::string StringLiteral::asXML() {
     return "<StringLiteral>" + safeLiterals(literal) + "</StringLiteral>";
 }
 
-BooleanLiteral::BooleanLiteral(std::string literal) {
+BooleanLiteral::BooleanLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
@@ -41,7 +41,7 @@ std::string BooleanLiteral::asXML() {
     return "<BooleanLiteral>" + safeLiterals(literal) + "</BooleanLiteral>";
 }
 
-VariableIdentifier::VariableIdentifier(std::string name) {
+VariableIdentifier::VariableIdentifier(const std::string& name) {
     this->name = name;
 }
 
@@ -53,7 +53,7 @@ std::string VariableIdentifier::asXML() {
     return "<VariableIdentifier>" + name + "</VariableIdentifier>";
 }
 
-TypeIdentifier::TypeIdentifier(std::string name) {
+TypeIdentifier::TypeIdentifier(const std::string& name) {
     this->name = name;
 }
 
@@ -82,11 +82,13 @@ std::string BinaryOperator::asXML() {
            "</BinaryOperation>";
 }
 
-FunctionCall::FunctionCall(std::string callback, std::vector<AST*> args) {
+FunctionCall::FunctionCall(const std::string& callback, const std::string& generic, std::vector<AST*> args) {
     this->callback = callback;
+    this->generic = generic;
     this->args = args;
 }
 
+// Not updated
 std::string FunctionCall::asString() {
     std::string rep = "FunctionCall〈" + callback + " Args〈";
     for (AST* arg : args) rep += arg->asString() + " ";
@@ -94,13 +96,14 @@ std::string FunctionCall::asString() {
 }
 
 std::string FunctionCall::asXML() {
+    generic = (this->generic != "") ? "<Generic>" + this->generic + "</Generic>" : "";
     std::string rep =
-            "<FunctionCall><Callback>" + callback + "</Callback><Args>";
+            "<FunctionCall><Callback>" + callback + "</Callback>" + generic + "<Args>";
     for (AST* arg : args) rep += "<Arg>" + arg->asXML() + "</Arg>";
     return rep + "</Args></FunctionCall>";
 }
 
-VariableAssignment::VariableAssignment(std::string type, std::string name,
+VariableAssignment::VariableAssignment(const std::string& type, const std::string& name,
                                        AST* value) {
     this->type = type;
     this->name = name;
@@ -118,7 +121,7 @@ std::string VariableAssignment::asXML() {
            "</VariableAssignment>";
 }
 
-VariableReAssignment::VariableReAssignment(int op, std::string name,
+VariableReAssignment::VariableReAssignment(int op, const std::string& name,
                                            AST* value) {
     this->op = op;
     this->name = name;
@@ -181,7 +184,7 @@ AST* Parser::factor() {
     } else if (lexer->tk == TOK_ID) {
         VariableIdentifier* id = new VariableIdentifier(lexer->tkStr);
         lexer->match(TOK_ID);
-        if (lexer->tk == '(') return functionCall(id);
+        if (lexer->tk == '(' || lexer->tk == '<') return functionCall(id);
         return id;
     } else if (lexer->tk == '(') {
         lexer->match('(');
@@ -194,6 +197,16 @@ AST* Parser::factor() {
 }
 
 AST* Parser::functionCall(VariableIdentifier* callback) {
+    std::string generic = "";
+    if (lexer->tk == '<') {
+        lexer->match('<');
+        if (lexer->tk != '>') {
+            generic = lexer->tkStr;
+            lexer->match(TOK_ID);
+        }
+        lexer->match('>');
+    }
+
     std::vector<AST*> args;
     lexer->match('(');
     if (lexer->tk != ')') {
@@ -204,23 +217,13 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
         }
     }
     lexer->match(')');
-    return new FunctionCall(callback->name, args);
+    return new FunctionCall(callback->name, generic, args);
 }
 
 AST* Parser::functionCall() {
     std::string callback = lexer->tkStr;
     lexer->match(TOK_ID);
-    lexer->match('(');
-    std::vector<AST*> args;
-    if (lexer->tk != ')') {
-        args.push_back(logicalOrExpression());
-        while (lexer->tk == ',') {
-            lexer->match(',');
-            args.push_back(logicalOrExpression());
-        }
-    }
-    lexer->match(')');
-    return new FunctionCall(callback, args);
+    functionCall(new VariableIdentifier(callback));
 }
 
 // AST* Parser::unaryExpression() {}
@@ -345,7 +348,7 @@ AST* Parser::statement() {
     VariableIdentifier* node = new VariableIdentifier(lexer->tkStr);
     lexer->match(lexer->tk);
 
-    if (lexer->tk == '(') return functionCall(node);
+    if (lexer->tk == '(' || lexer->tk == '<') return functionCall(node);
 
     if (lexer->tk == '=' || lexer->tk == TOK_PLUSEQUAL ||
         lexer->tk == TOK_MINUSEQUAL || lexer->tk == TOK_TIMESEQUAL ||
