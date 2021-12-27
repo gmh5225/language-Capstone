@@ -1,3 +1,8 @@
+// Copyright (C) 2021 Justus Languell - All Rights Reserved.
+//
+// This file is part of Bounce which is released under the MIT license.
+// See file LICENSE or go write <jus@gtsbr.org> for full license details.
+
 #include "lexer.h"
 
 Lexer::Lexer(const std::string& input) {
@@ -37,9 +42,9 @@ void Lexer::match(int expectedTk) {
         throw new Exception("Got " + getTokenStr(tk) + " expected " +
                             getTokenStr(expectedTk) + " at " +
                             getPosition(tokenStart));
-    getNextToken();
+        getNextToken();
     }
-         
+
     getNextToken();
 }
 
@@ -85,8 +90,8 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_ELSE: return "else";
     case TOK_R_WHILE: return "while";
     case TOK_R_FOR: return "for";
-    //case TOK_R_BREAK: return "break";
-    //case TOK_R_CONTINUE: return "continue";
+    // case TOK_R_BREAK: return "break";
+    // case TOK_R_CONTINUE: return "continue";
     case TOK_R_FUNC: return "func";
     case TOK_R_RETURN: return "return";
 
@@ -104,7 +109,6 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_NEW: return "new";
     case TOK_R_CONST: return "const";
     case TOK_R_IMPORT: return "import";
-
     }
 
     return "?[" + std::to_string(token) + "]";
@@ -326,7 +330,7 @@ void Lexer::getNextToken() {
             if (currCh == '=') {
                 tk = TOK_RSHIFTEQUAL;
                 getNextCh();
-            } 
+            }
         } else if (tk == '+' && currCh == '=') {
             tk = TOK_PLUSEQUAL;
             getNextCh();
@@ -425,4 +429,3 @@ int Lexer::nextToken() {
     getNextToken();
     return tk;
 }
-

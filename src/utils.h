@@ -1,3 +1,8 @@
+// Copyright (C) 2021 Justus Languell - All Rights Reserved.
+//
+// This file is part of Bounce which is released under the MIT license.
+// See file LICENSE or go write <jus@gtsbr.org> for full license details.
+
 #ifndef BOUNCE_UTILS
 #define BOUNCE_UTILS
 
@@ -43,11 +48,12 @@ class UtilPath {
     std::string printable();
 };
 
-std::vector<std::string> splitStringIntoVector
-    (const std::string& subject, const char delimiter);
+std::vector<std::string> splitStringIntoVector(const std::string& subject,
+                                               const char delimiter);
 
 std::string replaceAllStringInString(std::string subject,
-    const std::string& search, const std::string& replace);
+                                     const std::string& search,
+                                     const std::string& replace);
 
 std::string stripWhitespace(const std::string& subject);
 

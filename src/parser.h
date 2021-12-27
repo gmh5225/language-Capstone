@@ -1,3 +1,8 @@
+// Copyright (C) 2021 Justus Languell - All Rights Reserved.
+//
+// This file is part of Bounce which is released under the MIT license.
+// See file LICENSE or go write <jus@gtsbr.org> for full license details.
+
 #ifndef BOUNCE_PARSER
 #define BOUNCE_PARSER
 
@@ -5,20 +10,14 @@
 
 #include "lexer.h"
 
-// class Statement {
-// }
-
-// class Expression {
-// }
-
 class AST {
-public:
+  public:
     virtual std::string asString() = 0;
     virtual std::string asXML() = 0;
 };
 
 class BinaryOperator : public AST {
-public:
+  public:
     BinaryOperator(AST* left, AST* right, int op);
 
     AST* left;
@@ -30,7 +29,7 @@ public:
 };
 
 class FunctionCall : public AST {
-public:
+  public:
     FunctionCall(std::string callback, std::vector<AST*> args);
 
     std::string callback;
@@ -38,11 +37,10 @@ public:
 
     std::string asString();
     std::string asXML();
-
 };
 
 class NumberLiteral : public AST {
-public:
+  public:
     NumberLiteral(std::string literal);
     std::string literal;
 
@@ -51,7 +49,7 @@ public:
 };
 
 class StringLiteral : public AST {
-public:
+  public:
     StringLiteral(std::string literal);
     std::string literal;
 
@@ -60,7 +58,7 @@ public:
 };
 
 class BooleanLiteral : public AST {
-public:
+  public:
     BooleanLiteral(std::string literal);
     std::string literal;
 
@@ -69,7 +67,7 @@ public:
 };
 
 class VariableIdentifier : public AST {
-public:
+  public:
     VariableIdentifier(std::string name);
     std::string name;
 
@@ -78,7 +76,7 @@ public:
 };
 
 class TypeIdentifier : public AST {
-public:
+  public:
     TypeIdentifier(std::string name);
     std::string name;
 
@@ -87,7 +85,7 @@ public:
 };
 
 class VariableAssignment : public AST {
-public:
+  public:
     VariableAssignment(std::string type, std::string name, AST* value);
 
     std::string type;
@@ -99,7 +97,7 @@ public:
 };
 
 class VariableReAssignment : public AST {
-public:
+  public:
     VariableReAssignment(int op, std::string name, AST* value);
 
     int op;
@@ -111,7 +109,7 @@ public:
 };
 
 class Block : public AST {
-public:
+  public:
     Block(std::vector<AST*> statements);
 
     std::vector<AST*> statements;
@@ -121,7 +119,7 @@ public:
 };
 
 class Parser {
-private:
+  private:
     Lexer* lexer;
 
     AST* factor();
@@ -149,12 +147,11 @@ private:
 
     AST* block();
 
-public:
+  public:
     Parser(Lexer* lexer);
     ~Parser();
 
     AST* parse();
 };
-
 
 #endif

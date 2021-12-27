@@ -1,3 +1,8 @@
+// Copyright (C) 2021 Justus Languell - All Rights Reserved.
+//
+// This file is part of Bounce which is released under the MIT license.
+// See file LICENSE or go write <jus@gtsbr.org> for full license details.
+
 #include "parser.h"
 
 NumberLiteral::NumberLiteral(std::string literal) {
@@ -67,15 +72,14 @@ BinaryOperator::BinaryOperator(AST* left, AST* right, int op) {
 }
 
 std::string BinaryOperator::asString() {
-    return "BinaryOperation〈" + left->asString() + " " 
-            + Lexer::getTokenStr(op) + " " 
-            + right->asString() + "〉";
+    return "BinaryOperation〈" + left->asString() + " " +
+           Lexer::getTokenStr(op) + " " + right->asString() + "〉";
 }
 
 std::string BinaryOperator::asXML() {
-    return "<BinaryOperation>" + left->asXML() + "<Operator>" 
-            + Lexer::getTokenStr(op) + "</Operator>" + right->asXML() 
-            + "</BinaryOperation>";
+    return "<BinaryOperation>" + left->asXML() + "<Operator>" +
+           Lexer::getTokenStr(op) + "</Operator>" + right->asXML() +
+           "</BinaryOperation>";
 }
 
 FunctionCall::FunctionCall(std::string callback, std::vector<AST*> args) {
@@ -85,49 +89,51 @@ FunctionCall::FunctionCall(std::string callback, std::vector<AST*> args) {
 
 std::string FunctionCall::asString() {
     std::string rep = "FunctionCall〈" + callback + " Args〈";
-    for (AST* arg : args)
-        rep += arg->asString() + " ";
+    for (AST* arg : args) rep += arg->asString() + " ";
     return rep + "〉〉";
 }
 
 std::string FunctionCall::asXML() {
-    std::string rep = "<FunctionCall><Callback>" 
-            + callback + "</Callback><Args>";
-    for (AST* arg : args)
-        rep += "<Arg>" + arg->asXML() + "</Arg>";
+    std::string rep =
+            "<FunctionCall><Callback>" + callback + "</Callback><Args>";
+    for (AST* arg : args) rep += "<Arg>" + arg->asXML() + "</Arg>";
     return rep + "</Args></FunctionCall>";
 }
 
-VariableAssignment::VariableAssignment(std::string type, std::string name, AST* value) {
+VariableAssignment::VariableAssignment(std::string type, std::string name,
+                                       AST* value) {
     this->type = type;
     this->name = name;
     this->value = value;
 }
 
 std::string VariableAssignment::asString() {
-    return "VariableAssignment〈" + type + " " + name + " " + value->asString() + "〉";
+    return "VariableAssignment〈" + type + " " + name + " " +
+           value->asString() + "〉";
 }
 
 std::string VariableAssignment::asXML() {
-    return "<VariableAssignment><Type>" + type + "</Type><Name>" + name 
-            + "</Name><Operator>'='</Operator>" + value->asXML() + "</VariableAssignment>";
+    return "<VariableAssignment><Type>" + type + "</Type><Name>" + name +
+           "</Name><Operator>'='</Operator>" + value->asXML() +
+           "</VariableAssignment>";
 }
 
-VariableReAssignment::VariableReAssignment(int op, std::string name, AST* value) {
+VariableReAssignment::VariableReAssignment(int op, std::string name,
+                                           AST* value) {
     this->op = op;
     this->name = name;
     this->value = value;
 }
 
 std::string VariableReAssignment::asString() {
-    return "VariableReAssignment〈" + name + " " + Lexer::getTokenStr(op) 
-            + " " + value->asString() + "〉";
+    return "VariableReAssignment〈" + name + " " + Lexer::getTokenStr(op) +
+           " " + value->asString() + "〉";
 }
 
 std::string VariableReAssignment::asXML() {
-    return "<VariableReAssignment><Name>" + name + "</Name><Operator>" 
-            + Lexer::getTokenStr(op) + "</Operator>" + value->asXML() 
-            + "</VariableReAssignment>";
+    return "<VariableReAssignment><Name>" + name + "</Name><Operator>" +
+           Lexer::getTokenStr(op) + "</Operator>" + value->asXML() +
+           "</VariableReAssignment>";
 }
 
 Block::Block(std::vector<AST*> statements) {
@@ -136,15 +142,14 @@ Block::Block(std::vector<AST*> statements) {
 
 std::string Block::asString() {
     std::string rep = "Block 〈\n";
-    for (AST* statement : this->statements) 
+    for (AST* statement : this->statements)
         rep += "  " + statement->asString() + " ;\n";
     return rep + "〉";
 }
 
 std::string Block::asXML() {
     std::string rep = "<Block>";
-    for (AST* statement : this->statements) 
-        rep += statement->asXML();
+    for (AST* statement : this->statements) rep += statement->asXML();
     return rep + "</Block>";
 }
 
@@ -176,8 +181,7 @@ AST* Parser::factor() {
     } else if (lexer->tk == TOK_ID) {
         VariableIdentifier* id = new VariableIdentifier(lexer->tkStr);
         lexer->match(TOK_ID);
-        if (lexer->tk == '(')
-            return functionCall(id);
+        if (lexer->tk == '(') return functionCall(id);
         return id;
     } else if (lexer->tk == '(') {
         lexer->match('(');
@@ -219,8 +223,7 @@ AST* Parser::functionCall() {
     return new FunctionCall(callback, args);
 }
 
-//AST* Parser::unaryExpression() {}
-
+// AST* Parser::unaryExpression() {}
 
 AST* Parser::multiplicativeExpression() {
     AST* node = factor();
@@ -228,7 +231,7 @@ AST* Parser::multiplicativeExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = factor();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
@@ -239,56 +242,44 @@ AST* Parser::additiveExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = multiplicativeExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
 
 AST* Parser::shiftExpression() {
     AST* node = additiveExpression();
-    while (lexer->tk == TOK_RSHIFT 
-            || lexer->tk == TOK_LSHIFT) {
+    while (lexer->tk == TOK_RSHIFT || lexer->tk == TOK_LSHIFT) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = additiveExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
-
 
 AST* Parser::relationalExpression() {
     AST* node = shiftExpression();
-    while (lexer->tk == TOK_SPACESHIP
-            || lexer->tk == '>'
-            || lexer->tk == '<'
-            || lexer->tk == TOK_GEQUAL
-            || lexer->tk == TOK_LEQUAL
-    ) {
+    while (lexer->tk == TOK_SPACESHIP || lexer->tk == '>' || lexer->tk == '<' ||
+           lexer->tk == TOK_GEQUAL || lexer->tk == TOK_LEQUAL) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = shiftExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
 
 AST* Parser::equalityExpression() {
     AST* node = relationalExpression();
-    while (lexer->tk == TOK_EQUAL
-            || lexer->tk == TOK_NEQUAL
-    ) {
+    while (lexer->tk == TOK_EQUAL || lexer->tk == TOK_NEQUAL) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = relationalExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
 
 AST* Parser::bitwiseAndExpression() {
     AST* node = equalityExpression();
@@ -296,11 +287,10 @@ AST* Parser::bitwiseAndExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = equalityExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
 
 AST* Parser::bitwiseXorExpression() {
     AST* node = bitwiseAndExpression();
@@ -308,12 +298,10 @@ AST* Parser::bitwiseXorExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = bitwiseAndExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
-
 
 AST* Parser::bitwiseOrExpression() {
     AST* node = bitwiseXorExpression();
@@ -321,11 +309,10 @@ AST* Parser::bitwiseOrExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = bitwiseXorExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
-
 
 AST* Parser::logicalAndExpression() {
     AST* node = bitwiseOrExpression();
@@ -333,7 +320,7 @@ AST* Parser::logicalAndExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = bitwiseOrExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
@@ -344,7 +331,7 @@ AST* Parser::logicalOrExpression() {
         int op = lexer->tk;
         lexer->match(lexer->tk);
         AST* right = logicalAndExpression();
-        node = new BinaryOperator(node, right, op); 
+        node = new BinaryOperator(node, right, op);
     }
     return node;
 }
@@ -352,32 +339,25 @@ AST* Parser::logicalOrExpression() {
 AST* Parser::statement() {
     if (lexer->tk != TOK_ID) {
         throw new Exception("Expected some sort of identifier");
-        return (AST*) NULL;
+        return (AST*)NULL;
     }
 
     VariableIdentifier* node = new VariableIdentifier(lexer->tkStr);
     lexer->match(lexer->tk);
 
-    if (lexer->tk == '(')
-        return functionCall(node);
+    if (lexer->tk == '(') return functionCall(node);
 
-    if (lexer->tk == '=' 
-        || lexer->tk == TOK_PLUSEQUAL 
-        || lexer->tk == TOK_MINUSEQUAL
-        || lexer->tk == TOK_TIMESEQUAL
-        || lexer->tk == TOK_DIVIDEEQUAL
-        || lexer->tk == TOK_MODEQUAL
-        || lexer->tk == TOK_LSHIFTEQUAL
-        || lexer->tk == TOK_RSHIFTEQUAL
-        || lexer->tk == TOK_ANDEQUAL
-        || lexer->tk == TOK_OREQUAL
-        || lexer->tk == TOK_XOREQUAL
-    ) {
+    if (lexer->tk == '=' || lexer->tk == TOK_PLUSEQUAL ||
+        lexer->tk == TOK_MINUSEQUAL || lexer->tk == TOK_TIMESEQUAL ||
+        lexer->tk == TOK_DIVIDEEQUAL || lexer->tk == TOK_MODEQUAL ||
+        lexer->tk == TOK_LSHIFTEQUAL || lexer->tk == TOK_RSHIFTEQUAL ||
+        lexer->tk == TOK_ANDEQUAL || lexer->tk == TOK_OREQUAL ||
+        lexer->tk == TOK_XOREQUAL) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        return new VariableReAssignment(op, node->name, logicalOrExpression()); 
+        return new VariableReAssignment(op, node->name, logicalOrExpression());
     } else if (lexer->tk == TOK_ID) {
-        std::string name = lexer->tkStr; 
+        std::string name = lexer->tkStr;
         lexer->match(lexer->tk);
         lexer->match('=');
         return new VariableAssignment(node->name, name, logicalOrExpression());

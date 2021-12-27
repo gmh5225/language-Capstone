@@ -1,3 +1,8 @@
+// Copyright (C) 2021 Justus Languell - All Rights Reserved.
+//
+// This file is part of Bounce which is released under the MIT license.
+// See file LICENSE or go write <jus@gtsbr.org> for full license details.
+
 #include "utils.h"
 
 bool isWhitespace(char ch) {
@@ -101,13 +106,15 @@ std::string stringFormat(const std::string& format, Args... args) {
 
 std::string readFile(const std::string& path) {
     std::ifstream inputFile(path);
-    if (!inputFile.is_open()) return ""; // std::printf("Could not open file\n");
+    if (!inputFile.is_open())
+        return ""; // std::printf("Could not open file\n");
     return std::string(std::istreambuf_iterator<char>(inputFile),
                        std::istreambuf_iterator<char>());
 }
 
 std::string ignoreShebang(const std::string& code) {
-    return (code.substr(0, 2) == "#!") ? code.substr(code.find_first_of('\n')) : code;
+    return (code.substr(0, 2) == "#!") ? code.substr(code.find_first_of('\n'))
+                                       : code;
 }
 
 std::string exeFilename() {
@@ -146,15 +153,13 @@ std::string UtilPath::printable() {
            "\nExt -> " + getExtension() + "\nBase -> " + getBasename() + "\n";
 }
 
-std::vector<std::string> splitStringIntoVector
-        (const std::string& subject, const char delimiter) {
+std::vector<std::string> splitStringIntoVector(const std::string& subject,
+                                               const char delimiter) {
     std::vector<std::string> tokens;
     std::string currentToken = "";
     for (int i = 0; i < subject.length(); i++) {
         if (subject[i] == delimiter) {
-            if (currentToken != "") {
-                tokens.push_back(currentToken);
-            }
+            if (currentToken != "") { tokens.push_back(currentToken); }
             currentToken = "";
         } else {
             currentToken += subject[i];
@@ -165,11 +170,12 @@ std::vector<std::string> splitStringIntoVector
 }
 
 std::string replaceAllStringInString(std::string subject,
-        const std::string& search, const std::string& replace) {
+                                     const std::string& search,
+                                     const std::string& replace) {
     size_t pos = 0;
     while ((pos = subject.find(search, pos)) != std::string::npos) {
-         subject.replace(pos, search.length(), replace);
-         pos += replace.length();
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
     }
     return subject;
 }
@@ -177,8 +183,7 @@ std::string replaceAllStringInString(std::string subject,
 std::string stripWhitespace(const std::string& subject) {
     std::string result = "";
     for (const char c : subject)
-        if (!isWhitespace(c))
-            result += c;
+        if (!isWhitespace(c)) result += c;
     return result;
 }
 
@@ -191,7 +196,7 @@ void dumpXML(const std::string& filename, const std::string& xml) {
 
 std::string safeLiterals(const std::string& str) {
     std::string result = "";
-    for (char const &c : str) {
+    for (char const& c : str) {
         switch (c) {
         case '\n': result += "\\n"; break;
         case '\r': result += "\\r"; break;

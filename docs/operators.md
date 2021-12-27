@@ -2,18 +2,18 @@
 
 In order of precedence:
 
-| Type | Operators |
-| ---- | --------- |
-| Unary | `!` [`$`](#size-of) |
-| Multiplicative | `*` `/` `%` |
-| Additive | `+` `-` |
-| Shift | `<<` `>>` |
-| Relational | `<` `>` `<=` `>=` [`<=>`](#instance-of)|
-| Equality | `==` `!=` |
-| Bitwise (ordered) | `&` `^` `\|` |
-| Logical (ordered) | `&&` `\|\|` |
-| Ternary | `? :` |
-| Assignment | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |
+| Type              | Operators                                                |
+| ----------------- | -------------------------------------------------------- |
+| Unary             | `!` [`$`](#size-of)                                      |
+| Multiplicative    | `*` `/` `%`                                              |
+| Additive          | `+` `-`                                                  |
+| Shift             | `<<` `>>`                                                |
+| Relational        | `<` `>` `<=` `>=` [`<=>`](#instance-of)                  |
+| Equality          | `==` `!=`                                                |
+| Bitwise (ordered) | `&` `^` `\|`                                             |
+| Logical (ordered) | `&&` `\|\|`                                              |
+| Ternary           | `? :`                                                    |
+| Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |
 
 ## Uncommon Operators
 
@@ -45,3 +45,4 @@ func main(String[] args) u1 {
     u1 a = x <=> MyObject;
     u1 b = y <=> MyObject;
 }
+```
