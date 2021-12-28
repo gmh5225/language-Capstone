@@ -41,6 +41,7 @@ enum TOKEN_TYPES {
     TOK_RSINGLEARROW,   //- ->
     TOK_RDOUBLEARROW,   //- =>
     TOK_SPACESHIP,      //- <=>
+    TOK_GENERIC,        //- :<
 
 // reserved words
 #define TOK_R_LIST_START TOK_R_IF

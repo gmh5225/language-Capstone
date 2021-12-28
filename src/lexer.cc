@@ -49,6 +49,7 @@ void Lexer::match(int expectedTk) {
 }
 
 std::string Lexer::getTokenStr(int token) {
+    if (token == -1) return "'<'";
     if (token > 32 && token < 128) {
         char buf[4] = "' '";
         buf[1] = (char)token;
@@ -85,6 +86,7 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_RSINGLEARROW: return "->";
     case TOK_RDOUBLEARROW: return "=>";
     case TOK_SPACESHIP: return "<=>";
+    case TOK_GENERIC: return ":<";
 
     case TOK_R_IF: return "if";
     case TOK_R_ELSE: return "else";
@@ -373,9 +375,17 @@ void Lexer::getNextToken() {
         } else if (tk == '<' && currCh == '-') {
             tk = TOK_LSINGLEARROW;
             getNextCh();
-        } else if (tk == ':' && currCh == ':') {
-            tk = TOK_COLONCOLON;
+        } else if (tk == TOK_LEQUAL && currCh == '>') {
+            tk = TOK_SPACESHIP;
             getNextCh();
+        } else if (tk == ':') {
+            if (currCh == ':') {
+                tk = TOK_COLONCOLON;
+                getNextCh();
+            } else if (currCh == '<') {
+                tk = TOK_GENERIC;
+                getNextCh();
+            }
         }
     }
 

@@ -1,4 +1,3 @@
-add ternary
 
 add if / else
 add while loops
@@ -6,6 +5,6 @@ add for loops
 
 add list parsing
 
+add ternary
 add function definitions
-add generic parsing
 add class definitions

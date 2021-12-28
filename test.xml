@@ -1,20 +1,32 @@
 <Block>
-    <VariableReAssignment>
-        <Name>l</Name>
-        <Operator>'='</Operator>
-        <FunctionCall>
-            <Callback>List</Callback>
-            <Generic>i32</Generic>
-            <Args></Args>
-        </FunctionCall>
-    </VariableReAssignment>
     <FunctionCall>
         <Callback>f</Callback>
         <Generic>i32</Generic>
-        <Args>
-            <Arg>
-                <VariableIdentifier>l</VariableIdentifier>
-            </Arg>
-        </Args>
+        <Args></Args>
     </FunctionCall>
+    <VariableAssignment>
+        <Type>i32</Type>
+        <Name>x</Name>
+        <Operator>'='</Operator>
+        <NumberLiteral>0</NumberLiteral>
+    </VariableAssignment>
+    <WhileStatement>
+        <Condition>
+            <BinaryOperation>
+                <VariableIdentifier>x</VariableIdentifier>
+                <Operator>
+                    '
+                    <null
+                </Operator>
+                <NumberLiteral>5</NumberLiteral>
+            </BinaryOperation>
+        </Condition>
+        <Block>
+            <VariableReAssignment>
+                <Name>x</Name>
+                <Operator>+=</Operator>
+                <NumberLiteral>1</NumberLiteral>
+            </VariableReAssignment>
+        </Block>
+    </WhileStatement>
 </Block>

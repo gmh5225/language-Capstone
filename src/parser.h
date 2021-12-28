@@ -119,6 +119,29 @@ class Block : public AST {
     std::string asXML();
 };
 
+class IfElseStatement : public AST {
+  public:
+    IfElseStatement(AST* condition, AST* ifBlock, AST* elseBlock);
+
+    AST* condition;
+    AST* ifBlock;
+    AST* elseBlock;
+
+    std::string asString();
+    std::string asXML();
+};
+
+class WhileStatement : public AST {
+  public:
+    WhileStatement(AST* condition, AST* block);
+
+    AST* condition;
+    AST* block;
+
+    std::string asString();
+    std::string asXML();
+};
+
 class Parser {
   private:
     Lexer* lexer;
@@ -147,6 +170,8 @@ class Parser {
     AST* statement();
 
     AST* block();
+
+    AST* program();
 
   public:
     Parser(Lexer* lexer);

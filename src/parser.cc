@@ -156,6 +156,37 @@ std::string Block::asXML() {
     return rep + "</Block>";
 }
 
+IfElseStatement::IfElseStatement(AST* condition, AST* ifBlock, AST* elseBlock) {
+    this->condition = condition;
+    this->ifBlock = ifBlock;
+    this->elseBlock = elseBlock;
+}
+
+std::string IfElseStatement::asString() {
+    return "asString() method is not implemented for IfElseStatement";
+}
+
+std::string IfElseStatement::asXML() {
+    std::string rep = "<IfElseStatement>";
+    rep += "<Condition>" + condition->asXML() + "</Condition>";
+    rep += "<IfBlock>" + ifBlock->asXML() + "</IfBlock>";
+    if (elseBlock != nullptr) rep += "<ElseBlock>" + elseBlock->asXML() + "</ElseBlock>";
+    return rep + "</IfElseStatement>";
+}
+
+WhileStatement::WhileStatement(AST* condition, AST* block) {
+    this->condition = condition;
+    this->block = block;
+}
+
+std::string WhileStatement::asString() {
+    return "asString() method is not implemented for WhileStatement";
+}
+
+std::string WhileStatement::asXML() {
+    return "<WhileStatement><Condition>" + condition->asXML() + "</Condition>" + block->asXML() + "</WhileStatement>";
+}
+
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
 }
@@ -201,8 +232,14 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
     if (lexer->tk == '<') {
         lexer->match('<');
         if (lexer->tk != '>') {
+            printf("Hello world 1 w/ %s & %c\n", lexer->tkStr.c_str(), lexer->currCh);
+            if (lexer->currCh != '>') 
+                return new BinaryOperator(callback, shiftExpression(), );
+
+            printf("Hello world 2\n");
             generic = lexer->tkStr;
             lexer->match(TOK_ID);
+            printf("Hello world 3\n");
         }
         lexer->match('>');
     }
@@ -340,6 +377,37 @@ AST* Parser::logicalOrExpression() {
 }
 
 AST* Parser::statement() {
+    if (lexer->tk == TOK_R_IF) {
+        lexer->match(TOK_R_IF);
+        lexer->match('(');
+        AST* cond = logicalOrExpression();
+        lexer->match(')');
+        AST* then;
+        if (lexer->tk == '{') {
+            then = block();
+        } else {
+            then = statement();
+        }
+        AST* else_ = nullptr;
+        if (lexer->tk == TOK_R_ELSE) {
+            lexer->match(TOK_R_ELSE);
+            if (lexer->tk == '{') {
+                else_ = block();
+            } else {
+                else_ = statement();
+            }
+        }
+        return new IfElseStatement(cond, then, else_);
+    }
+
+    if (lexer->tk == TOK_R_WHILE) {
+        lexer->match(TOK_R_WHILE);
+        lexer->match('(');
+        AST* cond = logicalOrExpression();
+        lexer->match(')');
+        return new WhileStatement(cond, block());
+    }
+
     if (lexer->tk != TOK_ID) {
         throw new Exception("Expected some sort of identifier");
         return (AST*)NULL;
@@ -348,7 +416,11 @@ AST* Parser::statement() {
     VariableIdentifier* node = new VariableIdentifier(lexer->tkStr);
     lexer->match(lexer->tk);
 
-    if (lexer->tk == '(' || lexer->tk == '<') return functionCall(node);
+    if (lexer->tk == '(' || lexer->tk == '<') {
+        auto f = functionCall(node);
+        lexer->match(';');
+        return f;
+    }
 
     if (lexer->tk == '=' || lexer->tk == TOK_PLUSEQUAL ||
         lexer->tk == TOK_MINUSEQUAL || lexer->tk == TOK_TIMESEQUAL ||
@@ -358,24 +430,37 @@ AST* Parser::statement() {
         lexer->tk == TOK_XOREQUAL) {
         int op = lexer->tk;
         lexer->match(lexer->tk);
-        return new VariableReAssignment(op, node->name, logicalOrExpression());
+        auto v = new VariableReAssignment(op, node->name, logicalOrExpression());
+        lexer->match(';');
+        return v;
     } else if (lexer->tk == TOK_ID) {
         std::string name = lexer->tkStr;
         lexer->match(lexer->tk);
         lexer->match('=');
-        return new VariableAssignment(node->name, name, logicalOrExpression());
+        auto v = new VariableAssignment(node->name, name, logicalOrExpression());
+        lexer->match(';');
+        return v;
     }
 }
 
 AST* Parser::block() {
+    lexer->match('{');
+    std::vector<AST*> statements;
+    while (lexer->tk != '}') {
+        statements.push_back(statement());
+    }
+    lexer->match('}');
+    return new Block(statements);
+}
+
+AST* Parser::program() {
     std::vector<AST*> statements;
     while (lexer->tk != TOK_EOF) {
         statements.push_back(statement());
-        lexer->match(';');
     }
     return new Block(statements);
 }
 
 AST* Parser::parse() {
-    return block();
+    return program();
 }
