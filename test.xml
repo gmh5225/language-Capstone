@@ -14,10 +14,7 @@
         <Condition>
             <BinaryOperation>
                 <VariableIdentifier>x</VariableIdentifier>
-                <Operator>
-                    '
-                    <null
-                </Operator>
+                <Operator>＜</Operator>
                 <NumberLiteral>5</NumberLiteral>
             </BinaryOperation>
         </Condition>

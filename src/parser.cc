@@ -232,14 +232,11 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
     if (lexer->tk == '<') {
         lexer->match('<');
         if (lexer->tk != '>') {
-            printf("Hello world 1 w/ %s & %c\n", lexer->tkStr.c_str(), lexer->currCh);
             if (lexer->currCh != '>') 
-                return new BinaryOperator(callback, shiftExpression(), );
+                return new BinaryOperator(callback, shiftExpression(), 60);
 
-            printf("Hello world 2\n");
             generic = lexer->tkStr;
             lexer->match(TOK_ID);
-            printf("Hello world 3\n");
         }
         lexer->match('>');
     }
