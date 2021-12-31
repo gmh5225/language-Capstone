@@ -106,7 +106,7 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_SET: return "set";
     case TOK_R_FINAL: return "final";
 
-    case TOK_R_VAR: return "var";
+    //case TOK_R_VAR: return "var";
     case TOK_R_TRUE: return "true";
     case TOK_R_FALSE: return "false";
     case TOK_R_NULL: return "null";
@@ -187,8 +187,6 @@ void Lexer::getNextToken() {
             tk = TOK_R_SET;
         else if (tkStr == "final")
             tk = TOK_R_FINAL;
-        else if (tkStr == "var")
-            tk = TOK_R_VAR;
         else if (tkStr == "true")
             tk = TOK_R_TRUE;
         else if (tkStr == "false")
@@ -201,6 +199,9 @@ void Lexer::getNextToken() {
             tk = TOK_R_CONST;
         else if (tkStr == "import")
             tk = TOK_R_IMPORT;
+
+        //else if (tkStr == "var")
+        //tk = TOK_R_VAR;
 
     } else if (isNumeric(currCh)) {
         bool isHex = false;

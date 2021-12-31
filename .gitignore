@@ -7,5 +7,7 @@ bin/src/*
 bin/src/*.o
 .build-cache
 test.bc
+test.xml
+test.json
 .dll
 .so

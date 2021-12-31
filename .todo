@@ -1,10 +1,12 @@
+High priority:
+ add function definitions
 
-add if / else
-add while loops
-add for loops
+Mid priority:
+ add multi-argument generics
+ add class definitions
 
-add list parsing
-
-add ternary
-add function definitions
-add class definitions
+Low priority:
+ add for loops
+ add list parsing
+ add ternary
+ deprecated AST* asString & asXML

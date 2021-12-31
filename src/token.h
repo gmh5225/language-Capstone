@@ -62,7 +62,7 @@ enum TOKEN_TYPES {
     TOK_R_SET,
     TOK_R_FINAL,
 
-    TOK_R_VAR,
+    //TOK_R_VAR,
 
     TOK_R_TRUE,
     TOK_R_FALSE,

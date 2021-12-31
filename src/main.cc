@@ -24,7 +24,8 @@ int main(int argc, char** argv) {
 
         auto parser = new Parser(lex);
         auto ast = parser->parse();
-        dumpXML(rootName + ".xml", ast->asXML());
+        //dumpStringToFile(rootName + ".xml", ast->asXML());
+        dumpStringToFile(rootName + ".json", ast->asJSON());
 
     } catch (Exception* e) { std::printf("ERROR: %s\n", e->text.c_str()); }
 }

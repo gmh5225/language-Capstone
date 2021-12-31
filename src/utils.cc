@@ -187,10 +187,10 @@ std::string stripWhitespace(const std::string& subject) {
     return result;
 }
 
-void dumpXML(const std::string& filename, const std::string& xml) {
+void dumpStringToFile(const std::string& filename, const std::string& content) {
     std::ofstream file;
     file.open(filename);
-    file << xml;
+    file << content;
     file.close();
 }
 

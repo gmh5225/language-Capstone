@@ -9,60 +9,80 @@ NumberLiteral::NumberLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
-std::string NumberLiteral::asString() {
+std::string NumberLiteral::asString(void) {
     return "NumberLiteral〈" + literal + "〉";
 }
 
-std::string NumberLiteral::asXML() {
+std::string NumberLiteral::asXML(void) {
     return "<NumberLiteral>" + literal + "</NumberLiteral>";
+}
+
+std::string NumberLiteral::asJSON(void) {
+    return "{\"*\":\"NumberLiteral\",\"literal\":\"" + literal + "\"}";
 }
 
 StringLiteral::StringLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
-std::string StringLiteral::asString() {
+std::string StringLiteral::asString(void) {
     return "StringLiteral〈" + safeLiterals(literal) + "〉";
 }
 
-std::string StringLiteral::asXML() {
+std::string StringLiteral::asXML(void) {
     return "<StringLiteral>" + safeLiterals(literal) + "</StringLiteral>";
+}
+
+std::string StringLiteral::asJSON(void) {
+    return "{\"*\":\"StringLiteral\",\"literal\":\"" + safeLiterals(literal) + "\"}";
 }
 
 BooleanLiteral::BooleanLiteral(const std::string& literal) {
     this->literal = literal;
 }
 
-std::string BooleanLiteral::asString() {
+std::string BooleanLiteral::asString(void) {
     return "BooleanLiteral〈" + safeLiterals(literal) + "〉";
 }
 
-std::string BooleanLiteral::asXML() {
+std::string BooleanLiteral::asXML(void) {
     return "<BooleanLiteral>" + safeLiterals(literal) + "</BooleanLiteral>";
+}
+
+std::string BooleanLiteral::asJSON(void) {
+    return "{\"*\":\"BooleanLiteral\",\"literal\":\"" + safeLiterals(literal) + "\"}";
 }
 
 VariableIdentifier::VariableIdentifier(const std::string& name) {
     this->name = name;
 }
 
-std::string VariableIdentifier::asString() {
+std::string VariableIdentifier::asString(void) {
     return "VariableIdentifier〈" + name + "〉";
 }
 
-std::string VariableIdentifier::asXML() {
+std::string VariableIdentifier::asXML(void) {
     return "<VariableIdentifier>" + name + "</VariableIdentifier>";
+}
+
+std::string VariableIdentifier::asJSON(void) {
+    return "{\"*\":\"VariableIdentifier\",\"identifier\":\"" + name + "\"}";
 }
 
 TypeIdentifier::TypeIdentifier(const std::string& name) {
     this->name = name;
 }
 
-std::string TypeIdentifier::asString() {
+std::string TypeIdentifier::asString(void) {
     return "TypeIdentifier〈" + name + "〉";
 }
 
-std::string TypeIdentifier::asXML() {
+std::string TypeIdentifier::asXML(void) {
     return "<TypeIdentifier>" + name + "</TypeIdentifier>";
+}
+
+std::string TypeIdentifier::asJSON(void) {
+    return "{\"*\":\"TypeIdentifier\",\"identifier\":\"" + name + "\"}";
 }
 
 BinaryOperator::BinaryOperator(AST* left, AST* right, int op) {
@@ -71,15 +91,21 @@ BinaryOperator::BinaryOperator(AST* left, AST* right, int op) {
     this->op = op;
 }
 
-std::string BinaryOperator::asString() {
+std::string BinaryOperator::asString(void) {
     return "BinaryOperation〈" + left->asString() + " " +
            Lexer::getTokenStr(op) + " " + right->asString() + "〉";
 }
 
-std::string BinaryOperator::asXML() {
+std::string BinaryOperator::asXML(void) {
     return "<BinaryOperation>" + left->asXML() + "<Operator>" +
            Lexer::getTokenStr(op) + "</Operator>" + right->asXML() +
            "</BinaryOperation>";
+}
+
+std::string BinaryOperator::asJSON(void) {
+    return "{\"*\":\"BinaryOperation\",\"left\":" + left->asJSON() +
+           ",\"operator\":\"" + Lexer::getTokenStr(op) + "\",\"right\":" +
+           right->asJSON() + "}";
 }
 
 FunctionCall::FunctionCall(const std::string& callback, const std::string& generic, std::vector<AST*> args) {
@@ -89,18 +115,26 @@ FunctionCall::FunctionCall(const std::string& callback, const std::string& gener
 }
 
 // Not updated
-std::string FunctionCall::asString() {
+std::string FunctionCall::asString(void) {
     std::string rep = "FunctionCall〈" + callback + " Args〈";
     for (AST* arg : args) rep += arg->asString() + " ";
     return rep + "〉〉";
 }
 
-std::string FunctionCall::asXML() {
+std::string FunctionCall::asXML(void) {
     generic = (this->generic != "") ? "<Generic>" + this->generic + "</Generic>" : "";
     std::string rep =
             "<FunctionCall><Callback>" + callback + "</Callback>" + generic + "<Args>";
     for (AST* arg : args) rep += "<Arg>" + arg->asXML() + "</Arg>";
     return rep + "</Args></FunctionCall>";
+}
+
+std::string FunctionCall::asJSON(void) {
+    generic = (this->generic != "") ? "\"generic\":\"" + this->generic + "\"" : "";
+    std::string rep =
+            "{\"*\":\"FunctionCall\",\"callback\":\"" + callback + "\",\"args\":[";
+    for (AST* arg : args) rep += arg->asJSON() + ",";
+    return rep + "]}";
 }
 
 VariableAssignment::VariableAssignment(const std::string& type, const std::string& name,
@@ -110,15 +144,20 @@ VariableAssignment::VariableAssignment(const std::string& type, const std::strin
     this->value = value;
 }
 
-std::string VariableAssignment::asString() {
+std::string VariableAssignment::asString(void) {
     return "VariableAssignment〈" + type + " " + name + " " +
            value->asString() + "〉";
 }
 
-std::string VariableAssignment::asXML() {
+std::string VariableAssignment::asXML(void) {
     return "<VariableAssignment><Type>" + type + "</Type><Name>" + name +
            "</Name><Operator>'='</Operator>" + value->asXML() +
            "</VariableAssignment>";
+}
+
+std::string VariableAssignment::asJSON(void) {
+    return "{\"*\":\"VariableAssignment\",\"type\":\"" + type + "\",\"name\":\"" +
+           name + "\",\"value\":" + value->asJSON() + "}";
 }
 
 VariableReAssignment::VariableReAssignment(int op, const std::string& name,
@@ -128,32 +167,43 @@ VariableReAssignment::VariableReAssignment(int op, const std::string& name,
     this->value = value;
 }
 
-std::string VariableReAssignment::asString() {
+std::string VariableReAssignment::asString(void) {
     return "VariableReAssignment〈" + name + " " + Lexer::getTokenStr(op) +
            " " + value->asString() + "〉";
 }
 
-std::string VariableReAssignment::asXML() {
+std::string VariableReAssignment::asXML(void) {
     return "<VariableReAssignment><Name>" + name + "</Name><Operator>" +
            Lexer::getTokenStr(op) + "</Operator>" + value->asXML() +
            "</VariableReAssignment>";
+}
+
+std::string VariableReAssignment::asJSON(void) {
+    return "{\"*\":\"VariableReAssignment\",\"name\":\"" + name + "\",\"value\":" +
+           value->asJSON() + "}";
 }
 
 Block::Block(std::vector<AST*> statements) {
     this->statements = statements;
 }
 
-std::string Block::asString() {
+std::string Block::asString(void) {
     std::string rep = "Block 〈\n";
     for (AST* statement : this->statements)
         rep += "  " + statement->asString() + " ;\n";
     return rep + "〉";
 }
 
-std::string Block::asXML() {
+std::string Block::asXML(void) {
     std::string rep = "<Block>";
     for (AST* statement : this->statements) rep += statement->asXML();
     return rep + "</Block>";
+}
+
+std::string Block::asJSON(void) {
+    std::string rep = "{\"*\":\"Block\",\"statements\":[";
+    for (AST* statement : this->statements) rep += statement->asJSON() + ",";
+    return rep + "]}";
 }
 
 IfElseStatement::IfElseStatement(AST* condition, AST* ifBlock, AST* elseBlock) {
@@ -162,11 +212,11 @@ IfElseStatement::IfElseStatement(AST* condition, AST* ifBlock, AST* elseBlock) {
     this->elseBlock = elseBlock;
 }
 
-std::string IfElseStatement::asString() {
+std::string IfElseStatement::asString(void) {
     return "asString() method is not implemented for IfElseStatement";
 }
 
-std::string IfElseStatement::asXML() {
+std::string IfElseStatement::asXML(void) {
     std::string rep = "<IfElseStatement>";
     rep += "<Condition>" + condition->asXML() + "</Condition>";
     rep += "<IfBlock>" + ifBlock->asXML() + "</IfBlock>";
@@ -174,24 +224,78 @@ std::string IfElseStatement::asXML() {
     return rep + "</IfElseStatement>";
 }
 
+std::string IfElseStatement::asJSON(void) {
+    std::string rep = "{\"*\":\"IfElseStatement\",\"condition\":" +
+                      condition->asJSON() + ",\"ifBlock\":" + ifBlock->asJSON();
+    if (elseBlock != nullptr) rep += ",\"elseBlock\":" + elseBlock->asJSON();
+    return rep + "}";
+}
+
 WhileStatement::WhileStatement(AST* condition, AST* block) {
     this->condition = condition;
     this->block = block;
 }
 
-std::string WhileStatement::asString() {
+std::string WhileStatement::asString(void) {
     return "asString() method is not implemented for WhileStatement";
 }
 
-std::string WhileStatement::asXML() {
+std::string WhileStatement::asXML(void) {
     return "<WhileStatement><Condition>" + condition->asXML() + "</Condition>" + block->asXML() + "</WhileStatement>";
+}
+
+std::string WhileStatement::asJSON(void) {
+    return "{\"*\":\"WhileStatement\",\"condition\":" + condition->asJSON() + ",\"block\":" + block->asJSON() + "}";
+}
+
+ParameterDeclaration::ParameterDeclaration(const std::string& type, const std::string& name) {
+    this->type = type;
+    this->name = name;
+}
+
+std::string ParameterDeclaration::asString() {
+    return "ParameterDeclaration〈" + type + " " + name + "〉";
+}
+
+std::string ParameterDeclaration::asXML() {
+    return "<ParameterDeclaration><Type>" + type + "</Type><Name>" + name + "</Name></ParameterDeclaration>";
+}
+
+std::string ParameterDeclaration::asJSON() {
+    return "{\"*\":\"ParameterDeclaration\",\"type\":\"" + type + "\",\"name\":\"" + name + "\"}";
+}
+
+FunctionDeclaration::FunctionDeclaration(const std::string& name, const std::string& generic, std::vector<AST*> args, AST* block, const std::string& returns) {
+    this->name = name;
+    this->generic = generic;
+    this->args = args;
+    this->block = block;
+    this->returns = returns;
+}
+
+std::string FunctionDeclaration::asString() {
+    std::string rep = "FunctionDeclaration〈" + name + "(";
+    for (AST* arg : args) rep += arg->asString() + ",";
+    return rep + ")" + returns + "〉";
+}
+
+std::string FunctionDeclaration::asXML() {
+    std::string rep = "<FunctionDeclaration><Name>" + name + "</Name><Generic>" + generic + "</Generic><Args>";
+    for (AST* arg : args) rep += arg->asXML();
+    return rep + "</Args><Returns>" + returns + "</Returns>" + block->asXML() + "</FunctionDeclaration>";
+}
+
+std::string FunctionDeclaration::asJSON() {
+    std::string rep = "{\"*\":\"FunctionDeclaration\",\"name\":\"" + name + "\",\"generic\":\"" + generic + "\",\"args\":[";
+    for (AST* arg : args) rep += arg->asJSON() + ",";
+    return rep + "],\"returns\":\"" + returns + "\",\"block\":" + block->asJSON() + "}";
 }
 
 Parser::Parser(Lexer* lexer) {
     this->lexer = lexer;
 }
 
-AST* Parser::factor() {
+AST* Parser::factor(void) {
     if (lexer->tk == TOK_INT) {
         NumberLiteral* num = new NumberLiteral(lexer->tkStr);
         lexer->match(TOK_INT);
@@ -254,15 +358,15 @@ AST* Parser::functionCall(VariableIdentifier* callback) {
     return new FunctionCall(callback->name, generic, args);
 }
 
-AST* Parser::functionCall() {
+AST* Parser::functionCall(void) {
     std::string callback = lexer->tkStr;
     lexer->match(TOK_ID);
     functionCall(new VariableIdentifier(callback));
 }
 
-// AST* Parser::unaryExpression() {}
+// AST* Parser::unaryExpression(void) {}
 
-AST* Parser::multiplicativeExpression() {
+AST* Parser::multiplicativeExpression(void) {
     AST* node = factor();
     while (lexer->tk == '*' || lexer->tk == '/' || lexer->tk == '%') {
         int op = lexer->tk;
@@ -273,7 +377,7 @@ AST* Parser::multiplicativeExpression() {
     return node;
 }
 
-AST* Parser::additiveExpression() {
+AST* Parser::additiveExpression(void) {
     AST* node = multiplicativeExpression();
     while (lexer->tk == '+' || lexer->tk == '-') {
         int op = lexer->tk;
@@ -284,7 +388,7 @@ AST* Parser::additiveExpression() {
     return node;
 }
 
-AST* Parser::shiftExpression() {
+AST* Parser::shiftExpression(void) {
     AST* node = additiveExpression();
     while (lexer->tk == TOK_RSHIFT || lexer->tk == TOK_LSHIFT) {
         int op = lexer->tk;
@@ -295,7 +399,7 @@ AST* Parser::shiftExpression() {
     return node;
 }
 
-AST* Parser::relationalExpression() {
+AST* Parser::relationalExpression(void) {
     AST* node = shiftExpression();
     while (lexer->tk == TOK_SPACESHIP || lexer->tk == '>' || lexer->tk == '<' ||
            lexer->tk == TOK_GEQUAL || lexer->tk == TOK_LEQUAL) {
@@ -307,7 +411,7 @@ AST* Parser::relationalExpression() {
     return node;
 }
 
-AST* Parser::equalityExpression() {
+AST* Parser::equalityExpression(void) {
     AST* node = relationalExpression();
     while (lexer->tk == TOK_EQUAL || lexer->tk == TOK_NEQUAL) {
         int op = lexer->tk;
@@ -318,7 +422,7 @@ AST* Parser::equalityExpression() {
     return node;
 }
 
-AST* Parser::bitwiseAndExpression() {
+AST* Parser::bitwiseAndExpression(void) {
     AST* node = equalityExpression();
     while (lexer->tk == '&') {
         int op = lexer->tk;
@@ -329,7 +433,7 @@ AST* Parser::bitwiseAndExpression() {
     return node;
 }
 
-AST* Parser::bitwiseXorExpression() {
+AST* Parser::bitwiseXorExpression(void) {
     AST* node = bitwiseAndExpression();
     while (lexer->tk == '^') {
         int op = lexer->tk;
@@ -340,7 +444,7 @@ AST* Parser::bitwiseXorExpression() {
     return node;
 }
 
-AST* Parser::bitwiseOrExpression() {
+AST* Parser::bitwiseOrExpression(void) {
     AST* node = bitwiseXorExpression();
     while (lexer->tk == '|') {
         int op = lexer->tk;
@@ -351,7 +455,7 @@ AST* Parser::bitwiseOrExpression() {
     return node;
 }
 
-AST* Parser::logicalAndExpression() {
+AST* Parser::logicalAndExpression(void) {
     AST* node = bitwiseOrExpression();
     while (lexer->tk == TOK_ANDAND) {
         int op = lexer->tk;
@@ -362,7 +466,7 @@ AST* Parser::logicalAndExpression() {
     return node;
 }
 
-AST* Parser::logicalOrExpression() {
+AST* Parser::logicalOrExpression(void) {
     AST* node = logicalAndExpression();
     while (lexer->tk == TOK_OROR) {
         int op = lexer->tk;
@@ -373,7 +477,7 @@ AST* Parser::logicalOrExpression() {
     return node;
 }
 
-AST* Parser::statement() {
+AST* Parser::statement(void) {
     if (lexer->tk == TOK_R_IF) {
         lexer->match(TOK_R_IF);
         lexer->match('(');
@@ -404,9 +508,9 @@ AST* Parser::statement() {
         lexer->match(')');
         return new WhileStatement(cond, block());
     }
-
     if (lexer->tk != TOK_ID) {
-        throw new Exception("Expected some sort of identifier");
+        throw new Exception("Expected some sort of identifier at " +
+                            lexer->getPosition(lexer->tokenStart));
         return (AST*)NULL;
     }
 
@@ -440,7 +544,7 @@ AST* Parser::statement() {
     }
 }
 
-AST* Parser::block() {
+AST* Parser::block(void) {
     lexer->match('{');
     std::vector<AST*> statements;
     while (lexer->tk != '}') {
@@ -450,14 +554,53 @@ AST* Parser::block() {
     return new Block(statements);
 }
 
-AST* Parser::program() {
+AST* Parser::parameterDeclaration(void) {
+    auto type = lexer->tkStr;
+    lexer->match(TOK_ID);
+    auto name = lexer->tkStr;
+    lexer->match(TOK_ID);
+    return new ParameterDeclaration(type, name);
+}
+
+AST* Parser::functionDeclaration(void) {
+    std::string generic = "";
+    lexer->match(TOK_R_FUNC);
+    std::string name = lexer->tkStr;
+    lexer->match(TOK_ID);
+    if (lexer->tk == '<') {
+        lexer->match('<');
+        if (lexer->tk != '>') {
+            generic = lexer->tkStr;
+            lexer->match(TOK_ID);
+        }
+        lexer->match('>');
+    }
+    lexer->match('(');
+    std::vector<AST*> args;
+    if (lexer->tk != ')') {
+        args.push_back(parameterDeclaration());
+        while (lexer->tk == ',') {
+            lexer->match(',');
+            args.push_back(parameterDeclaration());
+        }
+    }
+    lexer->match(')');
+     std::string returns = "u0";
+    if (lexer->tk == TOK_ID) { 
+        returns = lexer->tkStr;
+        lexer->match(TOK_ID);
+    }
+    return new FunctionDeclaration(name, generic, args, block(), returns);
+}
+
+AST* Parser::program(void) {
     std::vector<AST*> statements;
     while (lexer->tk != TOK_EOF) {
-        statements.push_back(statement());
+        statements.push_back(functionDeclaration());
     }
     return new Block(statements);
 }
 
-AST* Parser::parse() {
+AST* Parser::parse(void) {
     return program();
 }
