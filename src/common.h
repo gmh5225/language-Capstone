@@ -49,6 +49,6 @@
 #define _snprintf std::snprintf
 #endif
 
-#define LOG(n) std::printf("-> %d\n", n);
+#define LOG(n) std::cout << "-> " << n << '\n'
 
 #endif

@@ -12,9 +12,9 @@
 
 class AST {
   public:
-    virtual std::string asString(void) = 0;
-    virtual std::string asXML(void) = 0;
     virtual std::string asJSON(void) = 0;
+
+    //virtual std::string codeGenC(void) = 0;
 };
 
 class BinaryOperator : public AST {
@@ -25,21 +25,17 @@ class BinaryOperator : public AST {
     AST* right;
     int op;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class FunctionCall : public AST {
   public:
-    FunctionCall(const std::string& callback, const std::string& generic, std::vector<AST*> args);
+    FunctionCall(AST* callback, AST* generic, std::vector<AST*> args);
 
-    std::string callback;
-    std::string generic;
+    AST* callback;
+    AST* generic;
     std::vector<AST*> args;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -48,8 +44,6 @@ class NumberLiteral : public AST {
     NumberLiteral(const std::string& literal);
     std::string literal;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -58,8 +52,6 @@ class StringLiteral : public AST {
     StringLiteral(const std::string& literal);
     std::string literal;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -68,18 +60,15 @@ class BooleanLiteral : public AST {
     BooleanLiteral(const std::string& literal);
     std::string literal;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class VariableIdentifier : public AST {
   public:
-    VariableIdentifier(const std::string& name);
+    VariableIdentifier(const std::string& name, AST* child);
+    AST* child;
     std::string name;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -88,34 +77,28 @@ class TypeIdentifier : public AST {
     TypeIdentifier(const std::string& name);
     std::string name;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class VariableAssignment : public AST {
   public:
-    VariableAssignment(const std::string& type, const std::string& name, AST* value);
+    VariableAssignment(AST* type, AST* name, AST* value);
 
-    std::string type;
-    std::string name;
+    AST* type;
+    AST* name;
     AST* value;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class VariableReAssignment : public AST {
   public:
-    VariableReAssignment(int op, const std::string& name, AST* value);
+    VariableReAssignment(int op, AST* name, AST* value);
 
     int op;
-    std::string name;
+    AST* name;
     AST* value;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -125,8 +108,6 @@ class Block : public AST {
 
     std::vector<AST*> statements;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -138,8 +119,6 @@ class IfElseStatement : public AST {
     AST* ifBlock;
     AST* elseBlock;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -150,35 +129,29 @@ class WhileStatement : public AST {
     AST* condition;
     AST* block;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class ParameterDeclaration : public AST {
   public:
-    ParameterDeclaration(const std::string& type, const std::string& name);
+    ParameterDeclaration(AST* type, AST* name);
 
-    std::string type;
-    std::string name;
+    AST* type;
+    AST* name;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
 class FunctionDeclaration : public AST {
   public:
-    FunctionDeclaration(const std::string& name, const std::string& generic, std::vector<AST*> args, AST* block, const std::string& returns);
+    FunctionDeclaration(AST* name, AST* generic, std::vector<AST*> args, AST* block, AST* returns);
 
-    std::string name;
-    std::string generic;
+    AST* name;
+    AST* generic;
     std::vector<AST*> args;
     AST* block;
-    std::string returns;
+    AST* returns;
 
-    std::string asString(void);
-    std::string asXML(void);
     std::string asJSON(void);
 };
 
@@ -186,9 +159,10 @@ class Parser {
   private:
     Lexer* lexer;
 
+    AST* variableIdentifier(void);
     AST* factor(void);
     AST* functionCall(void);
-    AST* functionCall(VariableIdentifier* callback);
+    AST* functionCall(AST* callback);
 
     AST* multiplicativeExpression(void);
 

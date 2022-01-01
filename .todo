@@ -1,5 +1,7 @@
 High priority:
- add function definitions
+ add ownership identifiers
+ generic types
+
 
 Mid priority:
  add multi-argument generics
