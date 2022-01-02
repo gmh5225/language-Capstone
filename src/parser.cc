@@ -68,8 +68,16 @@ FunctionCall::FunctionCall(AST* callback, AST*, std::vector<AST*> args) {
 }
 
 std::string FunctionCall::asJSON(void) {
-    std::string rep = "{\"*\":\"FunctionCall\",\"callback\":" + callback->asJSON() +
-                      ",\"generic\":" + (generic != nullptr ? generic->asJSON() : "\"*\"") + ",\"args\":[";
+    std::string rep = "{\"*\":\"FunctionCall\",\"callback\":" 
+                    + callback->asJSON() 
+                    + ",\"generic\":" + "\"balls\""
+                    //+ (generic != nullptr ? generic->asJSON() : "\"*\"") 
+                    + ",\"args\":[";
+
+    //LOG("callback: " << callback->asJSON() << ", generic null check: " << (generic == nullptr ? "yes":"no"));
+    if (generic != nullptr) {
+        LOG("generic: " << *generic.asJSON());
+    }
     for (AST* arg : args) rep += arg->asJSON() + ",";
     if (this->args.size() != 0) rep.pop_back();
     return rep + "]}";
@@ -236,6 +244,7 @@ AST* Parser::functionCall(AST* callback) {
         }
     }
     lexer->match(')');
+    //LOG((generic == nullptr ? "Function call" : "Generic function call"));
     return new FunctionCall(callback, generic, args);
 }
 
@@ -426,7 +435,11 @@ AST* Parser::statement(void) {
 AST* Parser::block(void) {
     lexer->match('{');
     std::vector<AST*> statements;
-    while (lexer->tk != '}') { statements.push_back(statement()); }
+    while (lexer->tk != '}') { 
+        auto s = statement();
+        statements.push_back(s);
+        //statements.push_back(statement()); 
+    }
     lexer->match('}');
     return new Block(statements);
 }
@@ -466,7 +479,8 @@ AST* Parser::functionDeclaration(void) {
         returns = new TypeIdentifier(lexer->tkStr);
         lexer->match(TOK_ID);
     }
-    return new FunctionDeclaration(name, generic, args, block(), returns);
+    AST* body = block();
+    return new FunctionDeclaration(name, generic, args, body, returns);
 }
 
 AST* Parser::program(void) {
