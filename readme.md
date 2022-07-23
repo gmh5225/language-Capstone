@@ -1,4 +1,4 @@
-![logo](logo.png)
+# Capstone
 
 Modern compiled programming language using the LLVM
 compiler backend. Designed to be small and simple

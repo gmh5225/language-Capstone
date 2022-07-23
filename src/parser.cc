@@ -76,7 +76,7 @@ std::string FunctionCall::asJSON(void) {
 
     //LOG("callback: " << callback->asJSON() << ", generic null check: " << (generic == nullptr ? "yes":"no"));
     if (generic != nullptr) {
-        LOG("generic: " << *generic.asJSON());
+        LOG("generic: " << generic->asJSON());
     }
     for (AST* arg : args) rep += arg->asJSON() + ",";
     if (this->args.size() != 0) rep.pop_back();
