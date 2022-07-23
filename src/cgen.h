@@ -1,8 +1,8 @@
-// Copyright (C) 2021 Justus Languell - All Rights Reserved.
-//
-// This file is part of Bounce which is released under the MIT license.
-// See file LICENSE or go write <jus@gtsbr.org> for full license details.
-
+/**
+ * Copyright (C) 2021-2022 
+ * This file is part of Capstone, which is licensed under the MIT license.
+ * For more details, see ./license.txt or write <jus@gtsbr.org>.
+ */
 #ifndef BOUNCE_CGEN
 #define BOUNCE_CGEN
 
