@@ -1,9 +1,72 @@
 BinaryOperator {
     left: node
     right: node
-    op: token,
+    op: token
+}
+
+FunctionCall {
+    callback: node
+    generic: node
+    params: nodes
 }
 
 NumberLiteral {
     literal: string
+}
+
+StringLiteral {
+    literal: string
+}
+
+BooleanLiteral {
+    literal: string
+}
+
+VariableIdentifier {
+    child: node
+    name: string
+}
+
+TypeIdentifier {
+    name: string
+}
+
+VariableAssignment {
+    type: node
+    name: node
+    value: node
+}
+
+VariableReassignment {
+    op: token
+    name: node
+    value: node
+}
+
+Block {
+    statements: nodes
+}
+
+IfElseStatement {
+    condition: node
+    ifBlock: node
+    elseBlock: node
+}
+
+WhileStatement {
+    condition: node
+    block: node
+}
+
+ParameterDeclaration {
+    type: node
+    name: node
+}
+
+FunctionDeclaration {
+    name: node
+    generic: node
+    params: nodes
+    block: node
+    returns: node
 }
