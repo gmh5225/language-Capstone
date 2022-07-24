@@ -52,9 +52,9 @@ std::string Lexer::getTokenStr(int token) {
     if (token == 60) return "＜"; // for markdown
     if (token == 62) return "＞";
     if (token > 32 && token < 128) {
-        //char buf[4] = "' '";
-        //buf[1] = (char) token;
-        //return buf;
+        // char buf[4] = "' '";
+        // buf[1] = (char) token;
+        // return buf;
         return (char*)(char)token;
     }
     switch (token) {
@@ -198,8 +198,8 @@ void Lexer::getNextToken() {
         else if (tkStr == "import")
             tk = TOK_R_IMPORT;
 
-        //else if (tkStr == "var")
-        //tk = TOK_R_VAR;
+        // else if (tkStr == "var")
+        // tk = TOK_R_VAR;
 
     } else if (isNumeric(currCh)) {
         bool isHex = false;

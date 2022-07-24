@@ -43,8 +43,6 @@ class Lexer {
     bool dataOwned;
 
     int dataPos;
-
-    
 };
 
 #endif

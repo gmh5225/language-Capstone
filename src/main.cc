@@ -6,10 +6,10 @@
 #include "main.h"
 
 class Some {
-public:
+  public:
     std::string foo;
     int bar;
-    Some(const std::string& foo, const int bar) : foo(foo), bar(bar) {};
+    Some(const std::string& foo, const int bar) : foo(foo), bar(bar){};
 };
 
 int main(int argc, char** argv) {
@@ -27,8 +27,9 @@ int main(int argc, char** argv) {
 
         auto lex = new Lexer(readFile(fileName));
         while (lex->tk) {
-            std::cout << lex->getPosition() << ": " <<
-            Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr << std::endl;
+            std::cout << lex->getPosition() << ": "
+                      << Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr
+                      << std::endl;
             lex->getNextToken();
         }
 
