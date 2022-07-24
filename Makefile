@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 
-TARGET_EXEC ?= bounce
+TARGET_EXEC ?= capstone 
 
 BUILD_DIR ?= ./bin
 SRC_DIRS ?= ./src
