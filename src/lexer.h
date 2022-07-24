@@ -3,8 +3,8 @@
  * This file is part of Capstone, which is licensed under the MIT license.
  * For more details, see ./license.txt or write <jus@gtsbr.org>.
  */
-#ifndef BOUNCE_LEXER
-#define BOUNCE_LEXER
+#ifndef CAPSTONE_LEXER
+#define CAPSTONE_LEXER
 
 #include "common.h"
 

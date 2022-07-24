@@ -3,8 +3,8 @@
  * This file is part of Capstone, which is licensed under the MIT license.
  * For more details, see ./license.txt or write <jus@gtsbr.org>.
  */
-#ifndef BOUNCE_EXCEPTION
-#define BOUNCE_EXCEPTION
+#ifndef CAPSTONE_EXCEPTION
+#define CAPSTONE_EXCEPTION
 
 #include "common.h"
 

@@ -1,5 +1,5 @@
-#ifndef BOUNCE_AST
-#define BOUNCE_AST
+#ifndef CAPSTONE_AST
+#define CAPSTONE_AST
 
 #include "common.h"
 #include "lexer.h"

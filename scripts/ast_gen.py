@@ -88,8 +88,8 @@ if __name__ == '__main__':
             
     decls = '\n'.join([node.header() for node in nodes])
             
-    header = f'''#ifndef BOUNCE_AST
-#define BOUNCE_AST
+    header = f'''#ifndef CAPSTONE_AST
+#define CAPSTONE_AST
 
 #include "common.h"
 #include "lexer.h"
