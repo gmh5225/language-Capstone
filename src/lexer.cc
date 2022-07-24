@@ -94,19 +94,17 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_ELSE: return "else";
     case TOK_R_WHILE: return "while";
     case TOK_R_FOR: return "for";
-    // case TOK_R_BREAK: return "break";
-    // case TOK_R_CONTINUE: return "continue";
+    case TOK_R_BREAK: return "break";
+    case TOK_R_CONTINUE: return "continue";
     case TOK_R_FUNC: return "func";
     case TOK_R_RETURN: return "return";
 
     case TOK_R_CLASS: return "class";
     case TOK_R_PUBLIC: return "public";
     case TOK_R_PRIVATE: return "private";
-    case TOK_R_GET: return "get";
-    case TOK_R_SET: return "set";
-    case TOK_R_FINAL: return "final";
+    case TOK_R_FINAL: return "const";
 
-    //case TOK_R_VAR: return "var";
+    case TOK_R_VAR: return "var";
     case TOK_R_TRUE: return "true";
     case TOK_R_FALSE: return "false";
     case TOK_R_NULL: return "null";

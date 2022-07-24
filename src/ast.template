@@ -1,0 +1,9 @@
+BinaryOperator {
+    left: node
+    right: node
+    op: token,
+}
+
+NumberLiteral {
+    literal: string
+}

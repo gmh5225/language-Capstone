@@ -34,6 +34,9 @@ class Lexer {
     std::string nextTokenString();
     int nextToken();
 
+    void getNextCh();
+    void getNextToken();
+
   protected:
     char* data;
     int dataStart, dataEnd;
@@ -41,8 +44,7 @@ class Lexer {
 
     int dataPos;
 
-    void getNextCh();
-    void getNextToken();
+    
 };
 
 #endif
