@@ -6,6 +6,7 @@
 
 import os, datetime
 
+name = 'Justus Languell'
 license_email = 'jus@gtsbr.org'
 project = 'Capstone'
 put_license_before = '#include'
@@ -20,7 +21,7 @@ def make_jdoc(text):
     return comment + ' */'
 
 def get_license():
-    return f'''Copyright (C) {get_project_year(project)} 
+    return f'''Copyright (C) {get_project_year(project)} {name}
 This file is part of {project}, which is licensed under the MIT license.
 For more details, see ./license.txt or write <{license_email}>.'''
 

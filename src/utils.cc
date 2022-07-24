@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2021-2022 
+ * Copyright (C) 2021-2022 Justus Languell
  * This file is part of Capstone, which is licensed under the MIT license.
  * For more details, see ./license.txt or write <jus@gtsbr.org>.
  */
