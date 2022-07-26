@@ -1,10 +1,12 @@
 #include "parser.h"
 
 Node* Parser::parse(void) {
+    LOG(1);
     return parseFile();
 }
 
 Node* Parser::parseFile(void) {
+    LOG(2);
     std::vector<Node*> nodes;
     while (lexer->tk != TOK_EOF)
         nodes.push_back(parseFuncDecl());
@@ -12,6 +14,7 @@ Node* Parser::parseFile(void) {
 }
 
 Node* Parser::parseFuncDecl(void) {
+    LOG(3);
     Node* generic = NULL;
     lexer->match(TOK_R_FUNC);
 
@@ -21,6 +24,7 @@ Node* Parser::parseFuncDecl(void) {
         if (lexer->tk != '>') 
             generic = parseTypeIdent();
     }
+    LOG(4);
     lexer->match('(');
     std::vector<Node*> params;
     if (lexer->tk != ')') {
@@ -30,6 +34,7 @@ Node* Parser::parseFuncDecl(void) {
             params.push_back(parseParamDecl());
         }
     }
+    LOG(5);
     lexer->match(')');
     std::vector<Node*> returns;
     if (lexer->tk == TOK_ID)
@@ -43,11 +48,13 @@ Node* Parser::parseFuncDecl(void) {
         }
         lexer->match(')');
     }
+    LOG(6);
     Node* body = parseBlock();
     return new FunctionDeclaration(name, generic, params, returns, body);
 }
 
 Node* Parser::parseVarIdent(void) {
+    LOG(7);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
     auto var = new VariableIdentifier(NULL, name);
@@ -59,6 +66,7 @@ Node* Parser::parseVarIdent(void) {
 }
 
 Node* Parser::parseTypeIdent(void) {
+    LOG(8);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
     auto type = new TypeIdentifier(NULL, name);
@@ -71,15 +79,18 @@ Node* Parser::parseTypeIdent(void) {
 }
 
 Node* Parser::parseParamDecl(void) {
+    LOG(9);
     return new ParameterDeclaration(parseTypeIdent(), 
             parseVarIdent());
 }
 
 Node* Parser::parseBlockOrStatement(void) {
+    LOG(10);
     return lexer->tk == '{' ? parseBlock() : parseStatement();
 }
 
 Node* Parser::parseBlock(void) {
+    LOG(11);
     lexer->match('{');
     std::vector<Node*> statements;
     while (lexer->tk != '}')
@@ -94,7 +105,7 @@ Node* Parser::parseStatement(void) {
     else if (lexer->tk == TOK_R_WHILE)
         return parseWhileStatement();
     else
-        return parseNonControlStatement();
+        return parseExpressionStatement();
 }
 
 Node* Parser::parseIfElseStatement(void) {
@@ -124,96 +135,110 @@ static const std::vector<int> assignOps = {'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, T
 
 Node* Parser::parseNonControlStatement(void) {
     
-    const std::string name = lexer->tkStr;
-    lexer->match(TOK_ID);
-    bool typePresent = false;
-    Node* node;
-    if (lexer->tk == TOK_ID) {
-        node = new TypeIdentifier(NULL, name);
-        typePresent = true;
-    } else if (lexer->tk == '<') {
-        auto t = new TypeIdentifier(NULL, name);
-        lexer->match('<');
-        t->child = parseTypeIdent();
-        lexer->match('>');
-        node = t;
-        typePresent = true;
-    } else if (lexer->tk == '.') {
-        auto v = new VariableIdentifier(NULL, name);
-        lexer->match('.');
-        v->child = parseVarIdent();
-        node = v;
-    } else
-        node = new VariableIdentifier(NULL, name);
+    // const std::string name = lexer->tkStr;
+    // lexer->match(TOK_ID);
+    // bool typePresent = false;
+    // Node* node;
+    // if (lexer->tk == TOK_ID) {
+    //     node = new TypeIdentifier(NULL, name);
+    //     typePresent = true;
+    // } else if (lexer->tk == '<') {
+    //     auto t = new TypeIdentifier(NULL, name);
+    //     lexer->match('<');
+    //     t->child = parseTypeIdent();
+    //     lexer->match('>');
+    //     node = t;
+    //     typePresent = true;
+    // } else if (lexer->tk == '.') {
+    //     auto v = new VariableIdentifier(NULL, name);
+    //     lexer->match('.');
+    //     v->child = parseVarIdent();
+    //     node = v;
+    // } else
+    //     node = new VariableIdentifier(NULL, name);
+    // if (lexer->tk == TOK_ID) {
+    //     Node* name = parseVarIdent();
+    //     lexer->match('=');
+    //     Node* v = new VariableDeclaration(node, name, parseExpression());
+    //     lexer->match(';');
+    //     return v;
+    // }
+    // // This shit will prolly not work!!!
+    // while (std::count(assignOps.begin(), assignOps.end(), lexer->tk) > 0) {
+    //     const int op = lexer->tk;
+    //     lexer->match(lexer->tk);
+    //     Node* right = parseLogicalOr();
+    //     node = new BinaryOperator(node, right, op);
+    // }
+    // return new ExpressionStatement(node);
 
-    if (lexer->tk == TOK_ID) {
-        Node* name = parseVarIdent();
-        lexer->match('=');
-        Node* v = new VariableDeclaration(node, name, parseExpression());
-        lexer->match(';');
-        return v;
-    }
-
-    
-    // This shit will prolly not work!!!
-    while (std::count(assignOps.begin(), assignOps.end(), lexer->tk) > 0) {
-        const int op = lexer->tk;
-        lexer->match(lexer->tk);
-        Node* right = parseLogicalOr();
-        node = new BinaryOperator(node, right, op);
-    }
-    return new ExpressionStatement(node);
+    return NULL;
 }
+
+Node* Parser::parseExpressionStatement(void) {
+    LOG(12);
+    auto statement = new ExpressionStatement(parseExpression());
+    lexer->match(';');
+    return statement;
+}
+
+
 
 Node* Parser::parseExpression(void) {
     return parseAssignExpression();
 }
 
 Node* Parser::parseAssignExpression(void) {
-    return parseBinaryOperator({'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, TOK_TIMESEQUAL, TOK_DIVIDEEQUAL, TOK_MODEQUAL, TOK_LSHIFTEQUAL, TOK_RSHIFTEQUAL, TOK_ANDEQUAL, TOK_OREQUAL, TOK_XOREQUAL}, &parseLogicalOr);
+    LOG(13);
+    auto b = parseBinaryOperator({'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, TOK_TIMESEQUAL, TOK_DIVIDEEQUAL, TOK_MODEQUAL, TOK_LSHIFTEQUAL, TOK_RSHIFTEQUAL, TOK_ANDEQUAL, TOK_OREQUAL, TOK_XOREQUAL}, &Parser::parseLogicalOr);
+    LOG(14);
+    return b;
 }
 
 Node* Parser::parseLogicalOr(void) {
-    return parseBinaryOperator(TOK_OROR, &parseLogicalAnd);
+    return parseBinaryOperator(TOK_OROR, &Parser::parseLogicalAnd);
 }
 
 Node* Parser::parseLogicalAnd(void) {
-    return parseBinaryOperator(TOK_ANDAND, &parseEquality);
+    return parseBinaryOperator(TOK_ANDAND, &Parser::parseEquality);
 }
 
 Node* Parser::parseBitwiseOr(void) {
-    return parseBinaryOperator('|', &parseBitwiseXor);
+    return parseBinaryOperator('|', &Parser::parseBitwiseXor);
 }
 
 Node* Parser::parseBitwiseXor(void) {
-    return parseBinaryOperator('^', &parseBitwiseAnd);
+    return parseBinaryOperator('^', &Parser::parseBitwiseAnd);
 }
 
 Node* Parser::parseBitwiseAnd(void) {
-    return parseBinaryOperator('&', &parseEquality);
+    return parseBinaryOperator('&', &Parser::parseEquality);
 }
 
 Node* Parser::parseEquality(void) {
-    return parseBinaryOperator({TOK_EQUAL, TOK_NEQUAL}, &parseRelational);
+    return parseBinaryOperator({TOK_EQUAL, TOK_NEQUAL}, &Parser::parseRelational);
 }
 
 Node* Parser::parseRelational(void) {
-    return parseBinaryOperator({TOK_SPACESHIP, '>', '<', TOK_GEQUAL, TOK_LEQUAL}, &parseShift);
+    return parseBinaryOperator({TOK_SPACESHIP, '>', '<', TOK_GEQUAL, TOK_LEQUAL}, &Parser::parseShift);
 }
 
 Node* Parser::parseShift(void) {
-    return parseBinaryOperator({TOK_RSHIFT, TOK_LSHIFT}, &parseRelational);
+    return parseBinaryOperator({TOK_RSHIFT, TOK_LSHIFT}, &Parser::parseAdditive);
 }
 
 Node* Parser::parseAdditive(void) {
-    return parseBinaryOperator({'+', '-'}, &parseMultiplicative);
+    return parseBinaryOperator({'+', '-'}, &Parser::parseMultiplicative);
 }
 
 Node* Parser::parseMultiplicative(void) {
-    return parseBinaryOperator({'*', '/', '%'}, &parseElement);
+    LOG(201);
+    return parseBinaryOperator({'*', '/', '%'}, &Parser::parseElement);
 }
 
 Node* Parser::parseElement(void) {
+    LOG(201);
+    lexer->match(lexer->tk); //eat it
     return NULL;
 }
 
@@ -229,6 +254,7 @@ Node* Parser::parseBinaryOperator(const int token, Node* (Parser::*callback)(voi
 }
 
 Node* Parser::parseBinaryOperator(std::vector<int> tokens, Node* (Parser::*callback)(void)) {
+    LOG(101);
     Node* node = (*this.*callback)();
     while (std::count(tokens.begin(), tokens.end(), lexer->tk) > 0) {
         const int op = lexer->tk;

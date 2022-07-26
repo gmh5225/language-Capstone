@@ -40,7 +40,7 @@ class Parser {
     Node* parseWhileStatement(void);
 
     Node* parseNonControlStatement(void);
-    Node* parseAssignStatement(void);
+    Node* parseExpressionStatement(void);
 
     Node* parseExpression(void);
 
