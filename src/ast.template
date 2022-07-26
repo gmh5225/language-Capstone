@@ -32,16 +32,14 @@ TypeIdentifier {
     name: string
 }
 
-VariableAssignment {
+VariableDeclaration {
     type: node
     name: node
     value: node
 }
 
-VariableReassignment {
-    op: token
-    name: node
-    value: node
+ExpressionStatement {
+    expression: node
 }
 
 Block {

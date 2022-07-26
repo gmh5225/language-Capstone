@@ -35,3 +35,20 @@ Files:
 * `parser.cc` The parser source implementation.
 * `ast.h` The declaration of the node classes for the AST.
 * `ast.cc` The implementation of the AST node methods.
+
+## Operators
+
+In order of precedence:
+
+| Type              | Operators                                                |
+| ----------------- | -------------------------------------------------------- |
+| Unary             | `!` [`$`](#size-of)                                      |
+| Multiplicative    | `*` `/` `%`                                              |
+| Additive          | `+` `-`                                                  |
+| Shift             | `<<` `>>`                                                |
+| Relational        | `<` `>` `<=` `>=` [`<=>`](#instance-of)                  |
+| Equality          | `==` `!=`                                                |
+| Bitwise (ordered) | `&` `^` `\|`                                             |
+| Logical (ordered) | `&&` `\|\|`                                              |
+| Ternary           | `? :`                                                    |
+| Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |

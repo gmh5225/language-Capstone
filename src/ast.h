@@ -73,23 +73,21 @@ class TypeIdentifier : public Node {
     std::string toJSON(void);
 };
 
-class VariableAssignment : public Node {
+class VariableDeclaration : public Node {
   public:              
     Node* type;
     Node* name;
     Node* value;
      
-    VariableAssignment(Node* type, Node* name, Node* value) : type(type), name(name), value(value) {}
+    VariableDeclaration(Node* type, Node* name, Node* value) : type(type), name(name), value(value) {}
     std::string toJSON(void);
 };
 
-class VariableReassignment : public Node {
+class ExpressionStatement : public Node {
   public:              
-    int op;
-    Node* name;
-    Node* value;
+    Node* expression;
      
-    VariableReassignment(int op, Node* name, Node* value) : op(op), name(name), value(value) {}
+    ExpressionStatement(Node* expression) : expression(expression) {}
     std::string toJSON(void);
 };
 

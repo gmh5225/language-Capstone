@@ -30,12 +30,12 @@ std::string TypeIdentifier::toJSON(void) {
     return "{\"_type\": \"TypeIdentifier\",\"child\": " + child->toJSON() + ",\"name\":" + name + ",}";
 }
 
-std::string VariableAssignment::toJSON(void) {
-    return "{\"_type\": \"VariableAssignment\",\"type\": " + type->toJSON() + ",\"name\": " + name->toJSON() + ",\"value\": " + value->toJSON() + ",}";
+std::string VariableDeclaration::toJSON(void) {
+    return "{\"_type\": \"VariableDeclaration\",\"type\": " + type->toJSON() + ",\"name\": " + name->toJSON() + ",\"value\": " + value->toJSON() + ",}";
 }
 
-std::string VariableReassignment::toJSON(void) {
-    return "{\"_type\": \"VariableReassignment\",\"op\":" + Lexer::getTokenStr(op) + ",\"name\": " + name->toJSON() + ",\"value\": " + value->toJSON() + ",}";
+std::string ExpressionStatement::toJSON(void) {
+    return "{\"_type\": \"ExpressionStatement\",\"expression\": " + expression->toJSON() + ",}";
 }
 
 std::string Block::toJSON(void) {
