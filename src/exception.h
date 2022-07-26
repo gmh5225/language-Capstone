@@ -8,11 +8,11 @@
 
 #include "common.h"
 
+// Could be struct?
 class Exception {
   public:
-    std::string text;
-    Exception(const std::string& exceptionText) {
-        text = exceptionText;
+    const std::string text;
+    Exception(const std::string& text) : text(text) {
     }
 };
 

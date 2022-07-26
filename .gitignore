@@ -6,7 +6,7 @@ bin/src
 bin/src/*
 bin/src/*.o
 .build-cache
-test.bc
+test.cap
 test.xml
 test.json
 .dll
