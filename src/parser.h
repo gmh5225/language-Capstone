@@ -39,11 +39,11 @@ class Parser {
     Node* parseIfElseStatement(void);
     Node* parseWhileStatement(void);
 
-    Node* parseNonControlStatement(void);
     Node* parseExpressionStatement(void);
 
     Node* parseExpression(void);
 
+    Node* parseDeclExpression(void);
     Node* parseAssignExpression(void);
 
     Node* parseLogicalOr(void);

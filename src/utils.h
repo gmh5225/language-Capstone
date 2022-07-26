@@ -58,6 +58,4 @@ std::string stripWhitespace(const std::string& subject);
 
 void dumpStringToFile(const std::string& filename, const std::string& content);
 
-std::string _safeLiterals(const std::string& str);
-
 #endif

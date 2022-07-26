@@ -193,23 +193,3 @@ void dumpStringToFile(const std::string& filename, const std::string& content) {
     file << content;
     file.close();
 }
-
-std::string _safeLiterals(const std::string& str) {
-    std::string result = "";
-    for (char const& c : str) {
-        switch (c) {
-        case '\n': result += "\\n"; break;
-        case '\r': result += "\\r"; break;
-        case '\t': result += "\\t"; break;
-        case '\a': result += "\\a"; break;
-        case '\b': result += "\\b"; break;
-        case '\f': result += "\\f"; break;
-        case '\v': result += "\\v"; break;
-        case '\\': result += "\\\\"; break;
-        case '\'': result += "\\'"; break;
-        case '\"': result += "\\\""; break;
-        default: result += c;
-        }
-    }
-    return result;
-}
