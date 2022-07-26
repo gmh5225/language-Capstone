@@ -69,19 +69,24 @@ Node* Parser::parseTypeIdent(void) {
     LOG(8);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
-    auto type = new TypeIdentifier(NULL, name);
+    auto type = new TypeIdentifier(NULL, name, 0);
     if (lexer->tk == '<') {
         lexer->match('<');
         type->child = parseTypeIdent();
         lexer->match('>');
     }
+    while (lexer->tk == '[') {
+        lexer->match('[');
+        lexer->match(']');
+        type->list++;
+    }
     return type;
 }
 
 Node* Parser::parseParamDecl(void) {
-    LOG(9);
-    return new ParameterDeclaration(parseTypeIdent(), 
-            parseVarIdent());
+    Node* var = parseVarIdent();
+    lexer->match(':');
+    return new ParameterDeclaration(var, parseTypeIdent());
 }
 
 Node* Parser::parseBlockOrStatement(void) {
@@ -132,60 +137,8 @@ Node* Parser::parseWhileStatement(void) {
     return new WhileStatement(condition, block);
 }
 
-static const std::vector<int> assignOps = {'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, TOK_TIMESEQUAL, TOK_DIVIDEEQUAL, TOK_MODEQUAL, TOK_LSHIFTEQUAL, TOK_RSHIFTEQUAL, TOK_ANDEQUAL, TOK_OREQUAL, TOK_XOREQUAL};
-
-static bool isAssignOp(const int op) {
-    for (const auto i : assignOps) if (i == op) return true;
-    return false;
-}
-
-// type var 
-//
-// Node* Parser::parseExpressionStatement(void) {
-//     Node* statement;
-
-//     const std::string name = lexer->tkStr;
-//     lexer->match(TOK_ID);
-
-//     if (lexer->tk == TOK)
-//     else if (lexer->tk == TOK_ID || lexer->tk == '<') {
-//         auto type = new TypeIdentifier(NULL, name);
-//         if (lexer->tk == '<') {
-//             lexer->match('<');
-//             type->child = parseTypeIdent();
-//             lexer->match('>');
-//         }
-
-//         auto name = parseVarIdent();
-//         lexer->match('=');
-//         auto value = parseExpression();
-//         statement = new VariableDeclaration(type, name, value);
-//     } else {
-//         auto var = new VariableIdentifier(NULL, name);
-//         if (lexer->tk == '.') {
-//             lexer->match('.');
-//             var->child = parseVarIdent();
-//         }
-//         Node* node = var;
-//         while (isAssignOp(lexer->tk)) {
-//             const int op = lexer->tk;
-//             lexer->match(lexer->tk);
-//             Node* right = parseExpression();
-//             node = new BinaryOperator(node, right, op);
-//         }
-//         statement = new ExpressionStatement(node);
-//     }
-    
-//     lexer->match(';');
-//     return statement;
-// }
-
 // var: type
 Node* Parser::parseExpressionStatement(void) {
-    // auto statement = new ExpressionStatement(parseExpression());
-    // lexer->match(';');
-    // return statement;
-
     Node* node = parseExpression();
     if (lexer->tk != ':') {
         auto es = new ExpressionStatement(node);

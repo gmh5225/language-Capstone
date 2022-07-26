@@ -34,6 +34,7 @@ VariableIdentifier {
 TypeIdentifier {
     child: node
     name: string
+    list: count 
 }
 
 VariableDeclaration {

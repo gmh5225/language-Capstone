@@ -10,7 +10,8 @@ type_map = {
     'node': 'Node*',
     'nodes': 'std::vector<Node*>',
     'token': 'int',
-    'string': 'std::string'
+    'string': 'std::string',
+    'count': 'unsigned int'
 }
 
 class Element:
@@ -72,6 +73,8 @@ class Node:
                 json += f'\\"{element.name}\\": \\"" + Lexer::getTokenStr({element.name}) + "\\",'
             elif element.type == type_map['nodes']:
                 json += f'\\"{element.name}\\": " + createList({element.name}) + ",'
+            elif element.type == type_map['count']:
+                json += f'\\"{element.name}\\": \\"" + std::to_string({element.name}) + "\\",'
  
                 
         return f'''std::string {self.name}::toJSON(void) {{
