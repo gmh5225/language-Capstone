@@ -55,6 +55,10 @@ std::string BooleanLiteral::toJSON(void) {
     return "{\"_type\": \"BooleanLiteral\",\"literal\": \"" + safeLiterals(literal) + "\"}";
 }
 
+std::string NullLiteral::toJSON(void) {
+    return "{\"_type\": \"NullLiteral\",\"literal\": \"" + safeLiterals(literal) + "\"}";
+}
+
 std::string VariableIdentifier::toJSON(void) {
     return "{\"_type\": \"VariableIdentifier\",\"child\": " + nullSafeToString(child) + ",\"name\": \"" + safeLiterals(name) + "\"}";
 }

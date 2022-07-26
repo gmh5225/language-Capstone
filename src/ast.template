@@ -22,6 +22,10 @@ BooleanLiteral {
     literal: string
 }
 
+NullLiteral {
+    literal: string
+}
+
 VariableIdentifier {
     child: node
     name: string

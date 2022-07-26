@@ -239,8 +239,57 @@ Node* Parser::parseMultiplicative(void) {
 
 Node* Parser::parseElement(void) {
     LOG(201);
-    lexer->match(lexer->tk); //eat it
-    return NULL;
+
+    if (lexer->tk == TOK_INT || lexer->tk == TOK_FLOAT) {
+        auto num = new NumberLiteral(lexer->tkStr);
+        lexer->match(lexer->tk);
+        return num;
+    } else if (lexer->tk == TOK_STR) {
+        auto str = new StringLiteral(lexer->tkStr);
+        lexer->match(lexer->tk);
+        return str;
+    } else if (lexer->tk == TOK_R_TRUE || lexer->tk == TOK_R_FALSE) {
+        auto boolean = new BooleanLiteral(lexer->tk == TOK_R_TRUE ? "1" : "0");
+        lexer->match(lexer->tk);
+        return boolean;
+    } else if (lexer->tk == TOK_R_NULL) {
+        auto null = new NullLiteral("null");
+        lexer->match(lexer->tk);
+        return null;
+    } else if (lexer->tk == '<') {
+        lexer->match('<'); 
+        auto type = parseTypeIdent();
+        lexer->match('>');
+        auto name = parseVarIdent();
+        lexer->match('(');
+        std::vector<Node*> params;
+        if (lexer->tk != ')') {
+            params.push_back(parseExpression());
+            while (lexer->tk == ',') {
+                lexer->match(',');
+                params.push_back(parseExpression());
+            }
+        }
+        lexer->match(')');
+        return new FunctionCall(name, type, params);
+    } else if (lexer->tk == TOK_ID) {
+        auto name = parseVarIdent();
+        if (lexer->tk != '(')
+            return name;
+        else {
+            lexer->match('(');
+            std::vector<Node*> params;
+            if (lexer->tk != ')') {
+                params.push_back(parseExpression());
+                while (lexer->tk == ',') {
+                    lexer->match(',');
+                    params.push_back(parseExpression());
+                }
+            }
+            lexer->match(')');
+            return new FunctionCall(name, NULL, params);
+        } 
+    }
 }
 
 Node* Parser::parseBinaryOperator(const int token, Node* (Parser::*callback)(void)) {

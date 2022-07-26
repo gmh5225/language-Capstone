@@ -49,8 +49,10 @@ void Lexer::match(int expectedTk) {
 }
 
 std::string Lexer::getTokenStr(int token) {
-    if (token == 60) return "＜"; // for markdown
-    if (token == 62) return "＞";
+    // if (token == 60) return "＜"; // for markdown
+    if (token == 60) return "<";
+    // if (token == 62) return "＞";
+    if (token == 62) return ">";
     if (token > 32 && token < 128) 
         return std::string(1, token);
     switch (token) {

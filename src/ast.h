@@ -60,6 +60,14 @@ class BooleanLiteral : public Node {
     std::string toJSON(void);
 };
 
+class NullLiteral : public Node {
+  public:              
+    std::string literal;
+     
+    NullLiteral(const std::string& literal) : literal(literal) {}
+    std::string toJSON(void);
+};
+
 class VariableIdentifier : public Node {
   public:              
     Node* child;
