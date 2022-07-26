@@ -28,6 +28,7 @@ VariableIdentifier {
 }
 
 TypeIdentifier {
+    child: node
     name: string
 }
 
@@ -67,6 +68,6 @@ FunctionDeclaration {
     name: node
     generic: node
     params: nodes
+    returns: nodes
     block: node
-    returns: node
 }

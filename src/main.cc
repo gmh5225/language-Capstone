@@ -5,36 +5,31 @@
  */
 #include "main.h"
 
-class Some {
-  public:
-    std::string foo;
-    int bar;
-    Some(const std::string& foo, const int bar) : foo(foo), bar(bar){};
-};
-
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " <file.bc>" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <file.cap>" << std::endl;
         return 1;
     }
 
     try {
-        std::string fileName = argv[1];
-        std::string rootName = fileName.substr(0, fileName.find_last_of('.'));
+        const std::string fileName = argv[1];
+        const std::string rootName = fileName.substr(0, fileName.find_last_of('.'));
 
-        auto yea = new Some("shit", 42);
-        std::cout << yea->foo << " " << yea->bar << std::endl;
+        const std::string source = readFile(fileName);
 
-        auto lex = new Lexer(readFile(fileName));
-        while (lex->tk) {
-            std::cout << lex->getPosition() << ": "
-                      << Lexer::getTokenStr(lex->tk) << ": " << lex->tkStr
-                      << std::endl;
-            lex->getNextToken();
-        }
+        std::cout << source << std::endl;
 
-        // auto parser = new Parser(lex);
-        // auto ast = parser->parse();
+        auto lex = new Lexer(source);
+
+        // while (lex->tk) {
+        //     std::cout << lex->getPosition() << ": "
+        //               << Lexer::getTokenStr(lex->tk) << "\t" << lex->tkStr << ""
+        //               << std::endl;
+        //     lex->getNextToken();
+        // }
+
+        auto parser = new Parser(lex);
+        auto ast = parser->parse();
         // //dumpStringToFile(rootName + ".xml", ast->asXML());
         // //std::printf("%s\n", ast->asJSON().c_str());
         // dumpStringToFile(rootName + ".json", ast->asJSON());

@@ -10,7 +10,7 @@
 
 #include "exception.h"
 #include "lexer.h"
-// #include "parser.h"
+#include "parser.h"
 #include "token.h"
 #include "utils.h"
 

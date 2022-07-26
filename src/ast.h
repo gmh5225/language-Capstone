@@ -12,155 +12,132 @@ class Node {
 };
 
 class BinaryOperator : public Node {
-  public:
+  public:              
     Node* left;
     Node* right;
     int op;
-
-    BinaryOperator(Node* left, Node* right, int op)
-        : left(left), right(right), op(op) {
-    }
+     
+    BinaryOperator(Node* left, Node* right, int op) : left(left), right(right), op(op) {}
     std::string toJSON(void);
 };
 
 class FunctionCall : public Node {
-  public:
+  public:              
     Node* callback;
     Node* generic;
     std::vector<Node*> params;
-
-    FunctionCall(Node* callback, Node* generic, std::vector<Node*> params)
-        : callback(callback), generic(generic), params(params) {
-    }
+     
+    FunctionCall(Node* callback, Node* generic, std::vector<Node*> params) : callback(callback), generic(generic), params(params) {}
     std::string toJSON(void);
 };
 
 class NumberLiteral : public Node {
-  public:
+  public:              
     std::string literal;
-
-    NumberLiteral(const std::string& literal) : literal(literal) {
-    }
+     
+    NumberLiteral(const std::string& literal) : literal(literal) {}
     std::string toJSON(void);
 };
 
 class StringLiteral : public Node {
-  public:
+  public:              
     std::string literal;
-
-    StringLiteral(const std::string& literal) : literal(literal) {
-    }
+     
+    StringLiteral(const std::string& literal) : literal(literal) {}
     std::string toJSON(void);
 };
 
 class BooleanLiteral : public Node {
-  public:
+  public:              
     std::string literal;
-
-    BooleanLiteral(const std::string& literal) : literal(literal) {
-    }
+     
+    BooleanLiteral(const std::string& literal) : literal(literal) {}
     std::string toJSON(void);
 };
 
 class VariableIdentifier : public Node {
-  public:
+  public:              
     Node* child;
     std::string name;
-
-    VariableIdentifier(Node* child, const std::string& name)
-        : child(child), name(name) {
-    }
+     
+    VariableIdentifier(Node* child, const std::string& name) : child(child), name(name) {}
     std::string toJSON(void);
 };
 
 class TypeIdentifier : public Node {
-  public:
+  public:              
+    Node* child;
     std::string name;
-
-    TypeIdentifier(const std::string& name) : name(name) {
-    }
+     
+    TypeIdentifier(Node* child, const std::string& name) : child(child), name(name) {}
     std::string toJSON(void);
 };
 
 class VariableAssignment : public Node {
-  public:
+  public:              
     Node* type;
     Node* name;
     Node* value;
-
-    VariableAssignment(Node* type, Node* name, Node* value)
-        : type(type), name(name), value(value) {
-    }
+     
+    VariableAssignment(Node* type, Node* name, Node* value) : type(type), name(name), value(value) {}
     std::string toJSON(void);
 };
 
 class VariableReassignment : public Node {
-  public:
+  public:              
     int op;
     Node* name;
     Node* value;
-
-    VariableReassignment(int op, Node* name, Node* value)
-        : op(op), name(name), value(value) {
-    }
+     
+    VariableReassignment(int op, Node* name, Node* value) : op(op), name(name), value(value) {}
     std::string toJSON(void);
 };
 
 class Block : public Node {
-  public:
+  public:              
     std::vector<Node*> statements;
-
-    Block(std::vector<Node*> statements) : statements(statements) {
-    }
+     
+    Block(std::vector<Node*> statements) : statements(statements) {}
     std::string toJSON(void);
 };
 
 class IfElseStatement : public Node {
-  public:
+  public:              
     Node* condition;
     Node* ifBlock;
     Node* elseBlock;
-
-    IfElseStatement(Node* condition, Node* ifBlock, Node* elseBlock)
-        : condition(condition), ifBlock(ifBlock), elseBlock(elseBlock) {
-    }
+     
+    IfElseStatement(Node* condition, Node* ifBlock, Node* elseBlock) : condition(condition), ifBlock(ifBlock), elseBlock(elseBlock) {}
     std::string toJSON(void);
 };
 
 class WhileStatement : public Node {
-  public:
+  public:              
     Node* condition;
     Node* block;
-
-    WhileStatement(Node* condition, Node* block)
-        : condition(condition), block(block) {
-    }
+     
+    WhileStatement(Node* condition, Node* block) : condition(condition), block(block) {}
     std::string toJSON(void);
 };
 
 class ParameterDeclaration : public Node {
-  public:
+  public:              
     Node* type;
     Node* name;
-
-    ParameterDeclaration(Node* type, Node* name) : type(type), name(name) {
-    }
+     
+    ParameterDeclaration(Node* type, Node* name) : type(type), name(name) {}
     std::string toJSON(void);
 };
 
 class FunctionDeclaration : public Node {
-  public:
+  public:              
     Node* name;
     Node* generic;
     std::vector<Node*> params;
+    std::vector<Node*> returns;
     Node* block;
-    Node* returns;
-
-    FunctionDeclaration(Node* name, Node* generic, std::vector<Node*> params,
-                        Node* block, Node* returns)
-        : name(name), generic(generic), params(params), block(block),
-          returns(returns) {
-    }
+     
+    FunctionDeclaration(Node* name, Node* generic, std::vector<Node*> params, std::vector<Node*> returns, Node* block) : name(name), generic(generic), params(params), returns(returns), block(block) {}
     std::string toJSON(void);
 };
 
