@@ -96,6 +96,7 @@ Node* Parser::parseBlock(void) {
     while (lexer->tk != '}')
         statements.push_back(parseStatement());
     lexer->match('}');
+    std::cout << statements.size() << std::endl;
     return new Block(statements);
 }
 

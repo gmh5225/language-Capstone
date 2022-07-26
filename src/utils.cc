@@ -194,7 +194,7 @@ void dumpStringToFile(const std::string& filename, const std::string& content) {
     file.close();
 }
 
-std::string safeLiterals(const std::string& str) {
+std::string _safeLiterals(const std::string& str) {
     std::string result = "";
     for (char const& c : str) {
         switch (c) {

@@ -11,6 +11,11 @@ class Node {
     virtual std::string toJSON() = 0;
 };
 
+std::string createList(const std::vector<Node*>&);
+std::string safeLiterals(const std::string& str);
+std::string nullSafeToString(Node*);
+
+
 class BinaryOperator : public Node {
   public:              
     Node* left;
