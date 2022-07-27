@@ -253,31 +253,42 @@ Node* Parser::parseReturnStatement(void) {
     return new ReturnStatement(nodes);
 }
 
-// var: type
 Node* Parser::parseExpressionStatement(void) {
+    LOG(1);
     if (lexer->tk == ';') {
         lexer->match(';');
         return NULL;
     }
-    Node* node = parseExpression();
-    if (lexer->tk != ':') {
-        auto es = new ExpressionStatement(node);
-        lexer->match(';');
-        return es;
-    } else {
+    LOG(2);
+    if (lexer->tk == TOK_R_VAR || lexer->tk == TOK_R_CONST) 
+        return parseVarDecl();
+    else
+        return parseExpression();
+}
+
+Node* Parser::parseVarDecl(void) {
+    LOG(3);
+    const bool isConst = lexer->tk == TOK_R_CONST;
+    lexer->match(isConst ? TOK_R_CONST : TOK_R_VAR);
+    const unsigned int nConst = isConst ? 1 : 0;
+    Node* name = parseVarIdent();
+    Node* type = nullptr;
+    if (lexer->tk == ':') {
         lexer->match(':');
-        auto type = parseTypeIdent();
-        if (lexer->tk == ';') {
-            lexer->match(';');
-            return new VariableDeclaration(type, node, NULL);
-        } else {
-            lexer->match('=');
-            auto value = parseExpression();
-            lexer->match(';');
-            return new VariableDeclaration(type, node, value);
-        }
+        type = parseTypeIdent();
+    }
+    if (lexer->tk == ';') {
+        lexer->match(';');
+        return new VariableDeclaration(nConst, type, name, NULL);
+    } else {
+        lexer->match('=');
+        auto value = parseExpression();
+        lexer->match(';');
+        return new VariableDeclaration(nConst, type, name, value);
     }
 }
+
+
 
 Node* Parser::parseExpression(void) {
     return parseTernaryExpression();

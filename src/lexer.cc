@@ -182,11 +182,14 @@ void Lexer::getNextToken() {
             tk = TOK_R_NULL;
         else if (tkStr == "const")
             tk = TOK_R_CONST;
+        else if (tkStr == "final")
+            tk = TOK_R_CONST;
         else if (tkStr == "import")
             tk = TOK_R_IMPORT;
-
-        // else if (tkStr == "var")
-        // tk = TOK_R_VAR;
+        else if (tkStr == "var")
+            tk = TOK_R_VAR;
+        else if (tkStr == "let")
+            tk = TOK_R_VAR;
 
     } else if (isNumeric(currCh)) {
         bool isHex = false;

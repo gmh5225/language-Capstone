@@ -48,6 +48,7 @@ TypeIdentifier {
 }
 
 VariableDeclaration {
+    mut: count
     type: node
     name: node
     value: node

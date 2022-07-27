@@ -48,6 +48,8 @@ class Parser {
 
     Node* parseExpressionStatement(void);
 
+    Node* parseVarDecl(void);
+
     Node* parseExpression(void);
 
     Node* parseTernaryExpression(void);

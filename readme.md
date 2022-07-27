@@ -38,11 +38,11 @@ Files:
 
 ## Reserved Words
 
-Capstone has *17* reserved words. Reserved words can be one of 3 types: a keyword, a statement, or a modifier.
+Capstone has *18 + 2* reserved words. Reserved words can be either a keyword, a statement, or a modifier, or multiple.
 
 * `break` Statement to break a loop.
 * `class` Keyword to declare a class.
-* `const` Modifier to mark a variable as immutable.
+* `const` or `final` Keyword to declare an immutable variable or specify parameter immutability.
 * `continue` Statement to skip to the next pass of a loop.
 * `else` Keyword to declare the "else" body of an "if" statement.
 * `false` Literal for boolean false.
@@ -56,6 +56,7 @@ Capstone has *17* reserved words. Reserved words can be one of 3 types: a keywor
 * `public` Modifier to mark a field accessible outside the class scope.
 * `return` Statement to return from a function.
 * `true` Literal for boolean true.
+* `var` or `let` Keyword for declaring a mutable variable.
 * `while` Keyword to declare a "while" loop.
 
 ## Operators
@@ -106,6 +107,8 @@ func main(String[] args) u1 {
 ## Current TODO
 
 * Multiple declaration
+
+## Drastic Changes
 
 ## Things that may change
 
