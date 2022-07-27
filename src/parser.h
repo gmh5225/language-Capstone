@@ -40,7 +40,8 @@ class Parser {
 
     Node* parseExpression(void);
 
-    Node* parseDeclExpression(void);
+    Node* parseTernaryExpression(void);
+
     Node* parseAssignExpression(void);
 
     Node* parseLogicalOr(void);

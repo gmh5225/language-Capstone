@@ -122,3 +122,7 @@ std::string ReturnStatement::toJSON(void) {
 std::string ImportStatement::toJSON(void) {
     return "{\"_type\": \"ImportStatement\",\"package\": " + nullSafeToString(package) + "}";
 }
+
+std::string TernaryExpression::toJSON(void) {
+    return "{\"_type\": \"TernaryExpression\",\"condition\": " + nullSafeToString(condition) + ",\"ifExpression\": " + nullSafeToString(ifExpression) + ",\"elseExpression\": " + nullSafeToString(elseExpression) + "}";
+}

@@ -75,5 +75,4 @@ In order of precedence:
 ## TODO
 
 * Class declarations
-* Ternary expressions
 * Multiple declaration

@@ -107,3 +107,9 @@ ReturnStatement {
 ImportStatement {
     package: node
 }
+
+TernaryExpression {
+    condition: node
+    ifExpression: node
+    elseExpression: node
+}

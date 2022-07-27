@@ -211,4 +211,14 @@ class ImportStatement : public Node {
     std::string toJSON(void);
 };
 
+class TernaryExpression : public Node {
+  public:              
+    Node* condition;
+    Node* ifExpression;
+    Node* elseExpression;
+     
+    TernaryExpression(Node* condition, Node* ifExpression, Node* elseExpression) : condition(condition), ifExpression(ifExpression), elseExpression(elseExpression) {}
+    std::string toJSON(void);
+};
+
 #endif

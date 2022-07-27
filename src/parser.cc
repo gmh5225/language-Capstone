@@ -231,11 +231,18 @@ Node* Parser::parseExpressionStatement(void) {
 }
 
 Node* Parser::parseExpression(void) {
-    return parseAssignExpression();
+    return parseTernaryExpression();
 }
 
-Node* Parser::parseDeclExpression(void) {
-    return parseBinaryOperator(':', &Parser::parseAssignExpression);
+Node* Parser::parseTernaryExpression(void) {
+    Node* condition = parseAssignExpression();
+    if (lexer->tk != '?')
+        return condition;
+    lexer->match('?');
+    Node* ifTrue = parseExpression();
+    lexer->match(':');
+    Node* ifFalse = parseExpression();
+    return new TernaryExpression(condition, ifTrue, ifFalse);
 }
 
 Node* Parser::parseAssignExpression(void) {
