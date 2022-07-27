@@ -163,10 +163,10 @@ void Lexer::getNextToken() {
             tk = TOK_R_WHILE;
         else if (tkStr == "for")
             tk = TOK_R_FOR;
-        // else if (tkStr == "break")
-        //     tk = TOK_R_BREAK;
-        // else if (tkStr == "continue")
-        //     tk = TOK_R_CONTINUE;
+        else if (tkStr == "break")
+            tk = TOK_R_BREAK;
+        else if (tkStr == "continue")
+            tk = TOK_R_CONTINUE;
         else if (tkStr == "func")
             tk = TOK_R_FUNC;
         else if (tkStr == "return")

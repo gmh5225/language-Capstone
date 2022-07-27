@@ -56,7 +56,7 @@ std::string BooleanLiteral::toJSON(void) {
 }
 
 std::string NullLiteral::toJSON(void) {
-    return "{\"_type\": \"NullLiteral\",\"literal\": \"" + safeLiterals(literal) + "\"}";
+    return "{\"_type\": \"NullLiteral\"}";
 }
 
 std::string ArrayLiteral::toJSON(void) {
@@ -91,10 +91,26 @@ std::string WhileStatement::toJSON(void) {
     return "{\"_type\": \"WhileStatement\",\"condition\": " + nullSafeToString(condition) + ",\"block\": " + nullSafeToString(block) + "}";
 }
 
+std::string ForStatement::toJSON(void) {
+    return "{\"_type\": \"ForStatement\",\"init\": " + nullSafeToString(init) + ",\"condition\": " + nullSafeToString(condition) + ",\"post\": " + nullSafeToString(post) + ",\"block\": " + nullSafeToString(block) + "}";
+}
+
 std::string ParameterDeclaration::toJSON(void) {
     return "{\"_type\": \"ParameterDeclaration\",\"type\": " + nullSafeToString(type) + ",\"name\": " + nullSafeToString(name) + "}";
 }
 
 std::string FunctionDeclaration::toJSON(void) {
     return "{\"_type\": \"FunctionDeclaration\",\"name\": " + nullSafeToString(name) + ",\"generic\": " + nullSafeToString(generic) + ",\"params\": " + createList(params) + ",\"returns\": " + createList(returns) + ",\"block\": " + nullSafeToString(block) + "}";
+}
+
+std::string BreakStatement::toJSON(void) {
+    return "{\"_type\": \"BreakStatement\"}";
+}
+
+std::string ContinueStatement::toJSON(void) {
+    return "{\"_type\": \"ContinueStatement\"}";
+}
+
+std::string ReturnStatement::toJSON(void) {
+    return "{\"_type\": \"ReturnStatement\",\"expressions\": " + createList(expressions) + "}";
 }

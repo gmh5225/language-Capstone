@@ -105,7 +105,6 @@ Node* Parser::parseBlock(void) {
     while (lexer->tk != '}')
         statements.push_back(parseStatement());
     lexer->match('}');
-    std::cout << statements.size() << std::endl;
     return new Block(statements);
 }
 
@@ -114,6 +113,12 @@ Node* Parser::parseStatement(void) {
         return parseIfElseStatement();
     else if (lexer->tk == TOK_R_WHILE)
         return parseWhileStatement();
+    else if (lexer->tk == TOK_R_FOR)
+        return parseForStatement();
+    else if (lexer->tk == TOK_R_BREAK)
+        return parseBreakStatement();
+    else if (lexer->tk == TOK_R_CONTINUE)
+        return parseContinueStatement();
     else
         return parseExpressionStatement();
 }
@@ -124,7 +129,7 @@ Node* Parser::parseIfElseStatement(void) {
     Node* condition = parseExpression();
     lexer->match(')');
     Node* ifStatement = parseBlockOrStatement();
-    Node* elseStatement;
+    Node* elseStatement = nullptr;
     if (lexer->tk == TOK_R_ELSE) {
         lexer->match(TOK_R_ELSE);
         elseStatement = parseBlockOrStatement();
@@ -141,8 +146,36 @@ Node* Parser::parseWhileStatement(void) {
     return new WhileStatement(condition, block);
 }
 
+Node* Parser::parseForStatement(void) {
+    lexer->match(TOK_R_FOR);
+    lexer->match('(');
+    Node* init = lexer->tk != ';' ? parseExpressionStatement() : NULL;
+    Node* condition = parseExpression();
+    lexer->match(';');
+    Node* post = lexer->tk != ';' ? parseExpression() : NULL;
+    lexer->match(')');
+    Node* block = parseBlockOrStatement();
+    return new ForStatement(init, condition, post, block);
+}
+
+Node* Parser::parseBreakStatement(void) {
+    lexer->match(TOK_R_BREAK);
+    lexer->match(';');
+    return new BreakStatement();
+}
+
+Node* Parser::parseContinueStatement(void) {
+    lexer->match(TOK_R_CONTINUE);
+    lexer->match(';');
+    return new ContinueStatement();
+}
+
 // var: type
 Node* Parser::parseExpressionStatement(void) {
+    if (lexer->tk == ';') {
+        lexer->match(';');
+        return NULL;
+    }
     Node* node = parseExpression();
     if (lexer->tk != ':') {
         auto es = new ExpressionStatement(node);
@@ -229,7 +262,7 @@ Node* Parser::parseElement(void) {
         lexer->match(lexer->tk);
         return boolean;
     } else if (lexer->tk == TOK_R_NULL) {
-        auto null = new NullLiteral("null");
+        auto null = new NullLiteral();
         lexer->match(lexer->tk);
         return null;
     } else if (lexer->tk == '[') {

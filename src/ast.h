@@ -62,9 +62,8 @@ class BooleanLiteral : public Node {
 
 class NullLiteral : public Node {
   public:              
-    std::string literal;
      
-    NullLiteral(const std::string& literal) : literal(literal) {}
+    NullLiteral() {}
     std::string toJSON(void);
 };
 
@@ -140,6 +139,17 @@ class WhileStatement : public Node {
     std::string toJSON(void);
 };
 
+class ForStatement : public Node {
+  public:              
+    Node* init;
+    Node* condition;
+    Node* post;
+    Node* block;
+     
+    ForStatement(Node* init, Node* condition, Node* post, Node* block) : init(init), condition(condition), post(post), block(block) {}
+    std::string toJSON(void);
+};
+
 class ParameterDeclaration : public Node {
   public:              
     Node* type;
@@ -158,6 +168,28 @@ class FunctionDeclaration : public Node {
     Node* block;
      
     FunctionDeclaration(Node* name, Node* generic, std::vector<Node*> params, std::vector<Node*> returns, Node* block) : name(name), generic(generic), params(params), returns(returns), block(block) {}
+    std::string toJSON(void);
+};
+
+class BreakStatement : public Node {
+  public:              
+     
+    BreakStatement() {}
+    std::string toJSON(void);
+};
+
+class ContinueStatement : public Node {
+  public:              
+     
+    ContinueStatement() {}
+    std::string toJSON(void);
+};
+
+class ReturnStatement : public Node {
+  public:              
+    std::vector<Node*> expressions;
+     
+    ReturnStatement(std::vector<Node*> expressions) : expressions(expressions) {}
     std::string toJSON(void);
 };
 

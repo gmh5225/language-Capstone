@@ -23,7 +23,7 @@ BooleanLiteral {
 }
 
 NullLiteral {
-    literal: string
+    
 }
 
 ArrayLiteral {
@@ -66,6 +66,13 @@ WhileStatement {
     block: node
 }
 
+ForStatement {
+    init: node
+    condition: node
+    post: node
+    block: node
+}
+
 ParameterDeclaration {
     type: node
     name: node
@@ -77,4 +84,16 @@ FunctionDeclaration {
     params: nodes
     returns: nodes
     block: node
+}
+
+BreakStatement {
+
+}
+
+ContinueStatement {
+
+}
+
+ReturnStatement {
+    expressions: nodes
 }

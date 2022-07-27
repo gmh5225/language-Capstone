@@ -52,3 +52,14 @@ In order of precedence:
 | Logical (ordered) | `&&` `\|\|`                                              |
 | Ternary           | `? :`                                                    |
 | Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |
+
+## TODO
+
+* Unary expressions
+* Class declarations
+* Const handling
+* Return statement
+* Break statement
+* Continue statement
+* For loop
+* Ternary expressions

@@ -55,10 +55,11 @@ class Node:
             body += f'{element.type} {element.name};\n    '
         return body
     def header(self):
+        init = self.initialization()
         return f'''class {self.name} : public Node {{
   public:              
     {self.fields()} 
-    {self.name}({self.params()}) : {self.initialization()} {{}}
+    {self.name}({self.params()}){' : ' if init != '' else ''}{self.initialization()} {{}}
     std::string toJSON(void);
 }};
 '''

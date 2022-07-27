@@ -26,6 +26,11 @@ class Parser {
 
     Node* parseIfElseStatement(void);
     Node* parseWhileStatement(void);
+    Node* parseForStatement(void);
+
+    Node* parseBreakStatement(void);
+    Node* parseContinueStatement(void);
+    Node* parseReturnStatement(void);
 
     Node* parseExpressionStatement(void);
 
