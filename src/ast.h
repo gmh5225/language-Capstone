@@ -89,8 +89,9 @@ class TypeIdentifier : public Node {
     std::vector<Node*> children;
     std::string name;
     unsigned int list;
+    unsigned int final;
      
-    TypeIdentifier(std::vector<Node*> children, const std::string& name, unsigned int list) : children(children), name(name), list(list) {}
+    TypeIdentifier(std::vector<Node*> children, const std::string& name, unsigned int list, unsigned int final) : children(children), name(name), list(list), final(final) {}
     std::string toJSON(void);
 };
 

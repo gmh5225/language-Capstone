@@ -100,13 +100,10 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_CLASS: return "class";
     case TOK_R_PUBLIC: return "public";
     case TOK_R_PRIVATE: return "private";
-    case TOK_R_FINAL: return "const";
 
-    case TOK_R_VAR: return "var";
     case TOK_R_TRUE: return "true";
     case TOK_R_FALSE: return "false";
     case TOK_R_NULL: return "null";
-    case TOK_R_NEW: return "new";
     case TOK_R_CONST: return "const";
     case TOK_R_IMPORT: return "import";
     }

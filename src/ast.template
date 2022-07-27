@@ -23,7 +23,7 @@ BooleanLiteral {
 }
 
 NullLiteral {
-    
+
 }
 
 ArrayLiteral {
@@ -39,6 +39,7 @@ TypeIdentifier {
     children: nodes
     name: string
     list: count 
+    final: count
 }
 
 VariableDeclaration {

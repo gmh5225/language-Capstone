@@ -68,7 +68,7 @@ std::string VariableIdentifier::toJSON(void) {
 }
 
 std::string TypeIdentifier::toJSON(void) {
-    return "{\"_type\": \"TypeIdentifier\",\"children\": " + createList(children) + ",\"name\": \"" + safeLiterals(name) + "\",\"list\": \"" + std::to_string(list) + "\"}";
+    return "{\"_type\": \"TypeIdentifier\",\"children\": " + createList(children) + ",\"name\": \"" + safeLiterals(name) + "\",\"list\": \"" + std::to_string(list) + "\",\"final\": \"" + std::to_string(final) + "\"}";
 }
 
 std::string VariableDeclaration::toJSON(void) {

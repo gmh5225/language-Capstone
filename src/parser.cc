@@ -59,6 +59,8 @@ Node* Parser::parseVarIdent(void) {
 }
 
 Node* Parser::parseTypeIdent(void) {
+    const bool isConst = lexer->tk == TOK_R_CONST;
+    if (isConst) lexer->match(TOK_R_CONST);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
     std::vector<Node*> children;
@@ -80,7 +82,7 @@ Node* Parser::parseTypeIdent(void) {
             //                 lexer->getPosition(lexer->tokenStart));
     }
 
-    auto type = new TypeIdentifier(children, name, 0);
+    auto type = new TypeIdentifier(children, name, 0, isConst ? 1 : 0);
     while (lexer->tk == '[') {
         lexer->match('[');
         lexer->match(']');
