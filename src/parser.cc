@@ -119,6 +119,8 @@ Node* Parser::parseStatement(void) {
         return parseBreakStatement();
     else if (lexer->tk == TOK_R_CONTINUE)
         return parseContinueStatement();
+    else if (lexer->tk == TOK_R_RETURN)
+        return parseReturnStatement();
     else
         return parseExpressionStatement();
 }
@@ -168,6 +170,20 @@ Node* Parser::parseContinueStatement(void) {
     lexer->match(TOK_R_CONTINUE);
     lexer->match(';');
     return new ContinueStatement();
+}
+
+Node* Parser::parseReturnStatement(void) {
+    lexer->match(TOK_R_RETURN);
+    std::vector<Node*> nodes;
+    if (lexer->tk != ';') {
+        nodes.push_back(parseExpression());
+        while (lexer->tk == ',') {
+            lexer->match(',');
+            nodes.push_back(parseExpression());
+        }
+    }
+    lexer->match(';');
+    return new ReturnStatement(nodes);
 }
 
 // var: type
