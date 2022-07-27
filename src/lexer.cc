@@ -99,6 +99,7 @@ std::string Lexer::getTokenStr(int token) {
 
     case TOK_R_CLASS: return "class";
     case TOK_R_PUBLIC: return "public";
+    case TOK_R_PROTECTED: return "protected";
     case TOK_R_PRIVATE: return "private";
 
     case TOK_R_TRUE: return "true";
@@ -170,6 +171,8 @@ void Lexer::getNextToken() {
             tk = TOK_R_CLASS;
         else if (tkStr == "public")
             tk = TOK_R_PUBLIC;
+        else if (tkStr == "protected")
+            tk = TOK_R_PROTECTED;
         else if (tkStr == "private")
             tk = TOK_R_PRIVATE;
         else if (tkStr == "true")

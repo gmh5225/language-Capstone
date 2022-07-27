@@ -16,8 +16,54 @@ Node* Parser::parseGlobalScope(void) {
         return parseFuncDecl();
     else if (lexer->tk == TOK_R_IMPORT)
         return parseImport();
+    else if (lexer->tk == TOK_R_CLASS)
+        return parseClassDecl();
     else
         return parseBlockOrStatement();
+}
+
+Node* Parser::parseClassDecl(void) {
+    lexer->match(TOK_R_CLASS);
+    Node* name = parseTypeIdent();
+    Node* super = nullptr;
+    if (lexer->tk == ':') {
+        lexer->match(':');
+        super = parseTypeIdent();
+    }
+    Node* body = parseClassBody();   
+    return new ClassDeclaration(name, super, body);
+}
+
+Node* Parser::parseClassBody(void) {
+    lexer->match('{');
+    std::vector<Node*> fields;
+    while (lexer->tk != '}')
+        fields.push_back(parseClassVisibility());
+    lexer->match('}');
+    return new Block(fields);
+}
+
+Node* Parser::parseClassVisibility(void) {
+    if (lexer->tk == TOK_R_PRIVATE) {
+        lexer->match(TOK_R_PRIVATE);
+        return new ClassVisibility(parseClassMember(), 0);
+    } else if (lexer->tk == TOK_R_PROTECTED) {
+        lexer->match(TOK_R_PROTECTED);
+        return new ClassVisibility(parseClassMember(), 1);
+    } else if (lexer->tk == TOK_R_PUBLIC) {
+        lexer->match(TOK_R_PUBLIC);
+        return new ClassVisibility(parseClassMember(), 2);
+    } else {
+        return new ClassVisibility(parseClassMember(), 0);
+        return parseClassMember();
+    }
+}
+
+Node* Parser::parseClassMember(void) {
+    if (lexer->tk == TOK_R_FUNC)
+        return parseFuncDecl();
+    else
+        return parseExpressionStatement();
 }
 
 Node* Parser::parseImport(void) {

@@ -221,4 +221,23 @@ class TernaryExpression : public Node {
     std::string toJSON(void);
 };
 
+class ClassDeclaration : public Node {
+  public:              
+    Node* name;
+    Node* super;
+    Node* body;
+     
+    ClassDeclaration(Node* name, Node* super, Node* body) : name(name), super(super), body(body) {}
+    std::string toJSON(void);
+};
+
+class ClassVisibility : public Node {
+  public:              
+    Node* member;
+    unsigned int visibility;
+     
+    ClassVisibility(Node* member, unsigned int visibility) : member(member), visibility(visibility) {}
+    std::string toJSON(void);
+};
+
 #endif

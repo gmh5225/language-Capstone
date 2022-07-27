@@ -38,7 +38,7 @@ Files:
 
 ## Reserved Words
 
-Capstone has *16* reserved words. Reserved words can be one of 3 types: a keyword, a statement, or a modifier.
+Capstone has *17* reserved words. Reserved words can be one of 3 types: a keyword, a statement, or a modifier.
 
 * `break` Statement to break a loop.
 * `class` Keyword to declare a class.
@@ -52,6 +52,7 @@ Capstone has *16* reserved words. Reserved words can be one of 3 types: a keywor
 * `import` Keyword to use classes and functions from another package.
 * `null` Literal for a null reference.
 * `private` Modifier to mark a field accessible only in the class scope.
+* `protected` Modifier to mark a field accessible only in the class and child class scope.
 * `public` Modifier to mark a field accessible outside the class scope.
 * `return` Statement to return from a function.
 * `true` Literal for boolean true.
@@ -74,5 +75,4 @@ In order of precedence:
 
 ## TODO
 
-* Class declarations
 * Multiple declaration

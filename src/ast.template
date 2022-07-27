@@ -113,3 +113,14 @@ TernaryExpression {
     ifExpression: node
     elseExpression: node
 }
+
+ClassDeclaration {
+    name: node
+    super: node
+    body: node
+}
+
+ClassVisibility {
+    member: node
+    visibility: count
+}

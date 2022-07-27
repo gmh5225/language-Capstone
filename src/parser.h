@@ -19,6 +19,11 @@ class Parser {
 
     Node* parseImport(void);
 
+    Node* parseClassDecl(void);
+    Node* parseClassBody(void);
+    Node* parseClassVisibility(void);
+    Node* parseClassMember(void);
+
     Node* parseFuncDecl(void);
     Node* parseVarIdent(void);
     Node* parseTypeIdent(void);

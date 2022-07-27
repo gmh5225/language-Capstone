@@ -57,6 +57,7 @@ enum TOKEN_TYPES {
     TOK_R_CLASS,
     TOK_R_PUBLIC,
     TOK_R_PRIVATE,
+    TOK_R_PROTECTED,
 
     // TOK_R_VAR,
 

@@ -126,3 +126,11 @@ std::string ImportStatement::toJSON(void) {
 std::string TernaryExpression::toJSON(void) {
     return "{\"_type\": \"TernaryExpression\",\"condition\": " + nullSafeToString(condition) + ",\"ifExpression\": " + nullSafeToString(ifExpression) + ",\"elseExpression\": " + nullSafeToString(elseExpression) + "}";
 }
+
+std::string ClassDeclaration::toJSON(void) {
+    return "{\"_type\": \"ClassDeclaration\",\"name\": " + nullSafeToString(name) + ",\"super\": " + nullSafeToString(super) + ",\"body\": " + nullSafeToString(body) + "}";
+}
+
+std::string ClassVisibility::toJSON(void) {
+    return "{\"_type\": \"ClassVisibility\",\"member\": " + nullSafeToString(member) + ",\"visibility\": \"" + std::to_string(visibility) + "\"}";
+}
