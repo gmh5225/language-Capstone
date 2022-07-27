@@ -1,9 +1,14 @@
+/**
+ * Copyright (C) 2021-2022 Justus Languell
+ * This file is part of Capstone, which is licensed under the MIT license.
+ * For more details, see ./license.txt or write <jus@gtsbr.org>.
+ */
 #ifndef CAPSTONE_PARSER
 #define CAPSTONE_PARSER
 
+#include "ast.h"
 #include "common.h"
 #include "lexer.h"
-#include "ast.h"
 
 class Parser {
   public:

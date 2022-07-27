@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
 
     try {
         const std::string fileName = argv[1];
-        const std::string rootName = fileName.substr(0, fileName.find_last_of('.'));
+        const std::string rootName =
+                fileName.substr(0, fileName.find_last_of('.'));
 
         const std::string source = readFile(fileName);
 
@@ -23,7 +24,8 @@ int main(int argc, char** argv) {
 
         // while (lex->tk) {
         //     std::cout << lex->getPosition() << ": "
-        //               << Lexer::getTokenStr(lex->tk) << "\t" << lex->tkStr << ""
+        //               << Lexer::getTokenStr(lex->tk) << "\t" << lex->tkStr <<
+        //               ""
         //               << std::endl;
         //     lex->getNextToken();
         // }

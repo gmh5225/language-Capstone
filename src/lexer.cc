@@ -53,8 +53,7 @@ std::string Lexer::getTokenStr(int token) {
     if (token == 60) return "<";
     // if (token == 62) return "＞";
     if (token == 62) return ">";
-    if (token > 32 && token < 128) 
-        return std::string(1, token);
+    if (token > 32 && token < 128) return std::string(1, token);
     switch (token) {
     case TOK_EOF: return "EOF";
     case TOK_ID: return "ID";

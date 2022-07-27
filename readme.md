@@ -58,6 +58,8 @@ Capstone has *17* reserved words. Reserved words can be one of 3 types: a keywor
 * `true` Literal for boolean true.
 * `while` Keyword to declare a "while" loop.
 
+## Operators
+
 In order of precedence:
 
 | Type              | Operators                                                |
