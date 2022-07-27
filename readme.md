@@ -73,6 +73,64 @@ In order of precedence:
 | Ternary           | `? :`                                                    |
 | Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |
 
-## TODO
+### Uncommon Operators
+
+#### Size of
+
+The sizeof operator is expressed as the `$` character. It is used to find the size of a variable in ~~bits~~ (this is yet to be determined), returned as an unsigned integer. To store the size of variable `x` into variable `y`, the following code would be employed:
+
+```swift
+y: u16 = $x;
+```
+
+#### Instance of
+
+The instanceof operator is used to determine if a variable is an instance of a certain type, returning the true or false boolean as a single bit unsigned integer (`u1`). It is represented with the "spaceship" operator: `<=>`.
+
+```swift
+class MyObject { }
+
+class AnotherObject { }
+
+func main(String[] args) u1 {
+    x: MyObject = MyObject();
+    y: AnotherObject = AnotherObject();
+    u1 a = x <=> MyObject;
+    u1 b = y <=> MyObject;
+}
+
+```
+
+## Current TODO
 
 * Multiple declaration
+
+## Things that may change
+
+### Immutable keyword
+
+`const` vs `final`
+
+### Variable declaration syntax
+
+Current:
+
+```swift
+name: Type = f();   // define mutable
+name: var = f();         // infer mutable
+name: const Type = f(); // define immutable
+name: const var = f();       // infer immutable
+```
+
+Proposed:
+
+```swift
+var name: Type = f();   // define mutable
+var name = f();         // infer mutable
+const name: Type = f(); // define immutable
+const name = f();       // infer immutable
+```
+
+### Immutable parameter declaration syntax
+
+`f(name: const Type)` vs `f(const name: Type)`
