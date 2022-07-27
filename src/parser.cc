@@ -1,12 +1,10 @@
 #include "parser.h"
 
 Node* Parser::parse(void) {
-    LOG(1);
     return parseFile();
 }
 
 Node* Parser::parseFile(void) {
-    LOG(2);
     std::vector<Node*> nodes;
     while (lexer->tk != TOK_EOF)
         nodes.push_back(parseFuncDecl());
@@ -14,7 +12,6 @@ Node* Parser::parseFile(void) {
 }
 
 Node* Parser::parseFuncDecl(void) {
-    LOG(3);
     Node* generic = NULL;
     lexer->match(TOK_R_FUNC);
 
@@ -24,7 +21,6 @@ Node* Parser::parseFuncDecl(void) {
         if (lexer->tk != '>') 
             generic = parseTypeIdent();
     }
-    LOG(4);
     lexer->match('(');
     std::vector<Node*> params;
     if (lexer->tk != ')') {
@@ -34,7 +30,6 @@ Node* Parser::parseFuncDecl(void) {
             params.push_back(parseParamDecl());
         }
     }
-    LOG(5);
     lexer->match(')');
     std::vector<Node*> returns;
     if (lexer->tk == TOK_ID)
@@ -48,13 +43,11 @@ Node* Parser::parseFuncDecl(void) {
         }
         lexer->match(')');
     }
-    LOG(6);
     Node* body = parseBlock();
     return new FunctionDeclaration(name, generic, params, returns, body);
 }
 
 Node* Parser::parseVarIdent(void) {
-    LOG(7);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
     auto var = new VariableIdentifier(NULL, name);
@@ -66,15 +59,28 @@ Node* Parser::parseVarIdent(void) {
 }
 
 Node* Parser::parseTypeIdent(void) {
-    LOG(8);
     const std::string name = lexer->tkStr;
     lexer->match(TOK_ID);
-    auto type = new TypeIdentifier(NULL, name, 0);
+    std::vector<Node*> children;
     if (lexer->tk == '<') {
         lexer->match('<');
-        type->child = parseTypeIdent();
-        lexer->match('>');
+        children.push_back(parseTypeIdent());
+        while (lexer->tk == ',') {
+            lexer->match(',');
+            children.push_back(parseTypeIdent());
+        }
+
+        if (lexer->tk == TOK_RSHIFT)
+            lexer->match(TOK_RSHIFT);
+        else if (lexer->tk == '>')
+            lexer->match('>');
+        else ;
+            // throw new Exception("Got " + Lexer::getTokenStr(lexer->tk) + " expected " +
+            //                 Lexer::getTokenStr('>') + " at " +
+            //                 lexer->getPosition(lexer->tokenStart));
     }
+
+    auto type = new TypeIdentifier(children, name, 0);
     while (lexer->tk == '[') {
         lexer->match('[');
         lexer->match(']');
@@ -90,12 +96,10 @@ Node* Parser::parseParamDecl(void) {
 }
 
 Node* Parser::parseBlockOrStatement(void) {
-    LOG(10);
     return lexer->tk == '{' ? parseBlock() : parseStatement();
 }
 
 Node* Parser::parseBlock(void) {
-    LOG(11);
     lexer->match('{');
     std::vector<Node*> statements;
     while (lexer->tk != '}')
@@ -157,9 +161,6 @@ Node* Parser::parseExpressionStatement(void) {
             return new VariableDeclaration(type, node, value);
         }
     } 
-
-
-
 }
 
 Node* Parser::parseExpression(void) {
@@ -171,10 +172,7 @@ Node* Parser::parseDeclExpression(void) {
 }
 
 Node* Parser::parseAssignExpression(void) {
-    LOG(13);
-    auto b = parseBinaryOperator({'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, TOK_TIMESEQUAL, TOK_DIVIDEEQUAL, TOK_MODEQUAL, TOK_LSHIFTEQUAL, TOK_RSHIFTEQUAL, TOK_ANDEQUAL, TOK_OREQUAL, TOK_XOREQUAL}, &Parser::parseLogicalOr);
-    LOG(14);
-    return b;
+    return parseBinaryOperator({'=', TOK_PLUSEQUAL, TOK_MINUSEQUAL, TOK_TIMESEQUAL, TOK_DIVIDEEQUAL, TOK_MODEQUAL, TOK_LSHIFTEQUAL, TOK_RSHIFTEQUAL, TOK_ANDEQUAL, TOK_OREQUAL, TOK_XOREQUAL}, &Parser::parseLogicalOr);
 }
 
 Node* Parser::parseLogicalOr(void) {
@@ -214,13 +212,10 @@ Node* Parser::parseAdditive(void) {
 }
 
 Node* Parser::parseMultiplicative(void) {
-    LOG(201);
     return parseBinaryOperator({'*', '/', '%'}, &Parser::parseElement);
 }
 
 Node* Parser::parseElement(void) {
-    LOG(201);
-
     if (lexer->tk == TOK_INT || lexer->tk == TOK_FLOAT) {
         auto num = new NumberLiteral(lexer->tkStr);
         lexer->match(lexer->tk);
@@ -237,6 +232,18 @@ Node* Parser::parseElement(void) {
         auto null = new NullLiteral("null");
         lexer->match(lexer->tk);
         return null;
+    } else if (lexer->tk == '[') {
+        lexer->match('[');
+        std::vector<Node*> elements;
+        if (lexer->tk != ']') {
+            elements.push_back(parseExpression());
+            while (lexer->tk == ',') {
+                lexer->match(',');
+                elements.push_back(parseExpression());  
+            }
+        }   
+        lexer->match(']');
+        return new ArrayLiteral(elements);
     } else if (lexer->tk == '<') {
         lexer->match('<'); 
         auto type = parseTypeIdent();
@@ -285,7 +292,6 @@ Node* Parser::parseBinaryOperator(const int token, Node* (Parser::*callback)(voi
 }
 
 Node* Parser::parseBinaryOperator(std::vector<int> tokens, Node* (Parser::*callback)(void)) {
-    LOG(101);
     Node* node = (*this.*callback)();
     while (std::count(tokens.begin(), tokens.end(), lexer->tk) > 0) {
         const int op = lexer->tk;

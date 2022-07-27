@@ -5,18 +5,6 @@
 #include "lexer.h"
 #include "ast.h"
 
-// Dont use this, just lols
-#define PFN(name) Node* parser##name(void)
-
-#define BIN_EXP(token, function) Node* node = function(); \
-    while (lexer->tk == token) { \
-        int op = lexer->tk; \
-        lexer->match(lexer->tk); \
-        Node* right = function(); \
-        node = new BinaryOperator(node, right, op); \
-    } \
-    return node;
-
 class Parser {
   public:
     Parser(Lexer* lexer) : lexer(lexer) {

@@ -26,13 +26,17 @@ NullLiteral {
     literal: string
 }
 
+ArrayLiteral {
+    literal: nodes
+}
+
 VariableIdentifier {
     child: node
     name: string
 }
 
 TypeIdentifier {
-    child: node
+    children: nodes
     name: string
     list: count 
 }

@@ -30,9 +30,6 @@ int main(int argc, char** argv) {
 
         auto parser = new Parser(lex);
         auto ast = parser->parse();
-        LOG(-1);
-        // //dumpStringToFile(rootName + ".xml", ast->asXML());
-        // //std::printf("%s\n", ast->asJSON().c_str());
         std::cout << "\n\n" + ast->toJSON() << std::endl;
         dumpStringToFile(rootName + ".json", ast->toJSON());
 

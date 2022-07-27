@@ -9,7 +9,7 @@ The compiler is built from compartmentalized components encapsulated as classes.
 
 ## Components
 
-Lexer → (tokens) → Parser → (ast) → Validator → (ast) → Generator 
+Lexer → (tokens) → Parser → (ast) → Validator → (ast) → Generator
 
 ## Lexer and tokens
 

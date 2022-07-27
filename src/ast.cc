@@ -59,12 +59,16 @@ std::string NullLiteral::toJSON(void) {
     return "{\"_type\": \"NullLiteral\",\"literal\": \"" + safeLiterals(literal) + "\"}";
 }
 
+std::string ArrayLiteral::toJSON(void) {
+    return "{\"_type\": \"ArrayLiteral\",\"literal\": " + createList(literal) + "}";
+}
+
 std::string VariableIdentifier::toJSON(void) {
     return "{\"_type\": \"VariableIdentifier\",\"child\": " + nullSafeToString(child) + ",\"name\": \"" + safeLiterals(name) + "\"}";
 }
 
 std::string TypeIdentifier::toJSON(void) {
-    return "{\"_type\": \"TypeIdentifier\",\"child\": " + nullSafeToString(child) + ",\"name\": \"" + safeLiterals(name) + "\",\"list\": \"" + std::to_string(list) + "\"}";
+    return "{\"_type\": \"TypeIdentifier\",\"children\": " + createList(children) + ",\"name\": \"" + safeLiterals(name) + "\",\"list\": \"" + std::to_string(list) + "\"}";
 }
 
 std::string VariableDeclaration::toJSON(void) {

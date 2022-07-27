@@ -68,6 +68,14 @@ class NullLiteral : public Node {
     std::string toJSON(void);
 };
 
+class ArrayLiteral : public Node {
+  public:              
+    std::vector<Node*> literal;
+     
+    ArrayLiteral(std::vector<Node*> literal) : literal(literal) {}
+    std::string toJSON(void);
+};
+
 class VariableIdentifier : public Node {
   public:              
     Node* child;
@@ -79,11 +87,11 @@ class VariableIdentifier : public Node {
 
 class TypeIdentifier : public Node {
   public:              
-    Node* child;
+    std::vector<Node*> children;
     std::string name;
     unsigned int list;
      
-    TypeIdentifier(Node* child, const std::string& name, unsigned int list) : child(child), name(name), list(list) {}
+    TypeIdentifier(std::vector<Node*> children, const std::string& name, unsigned int list) : children(children), name(name), list(list) {}
     std::string toJSON(void);
 };
 
