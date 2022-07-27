@@ -36,7 +36,26 @@ Files:
 * `ast.h` The declaration of the node classes for the AST.
 * `ast.cc` The implementation of the AST node methods.
 
-## Operators
+## Reserved Words
+
+Capstone has *16* reserved words. Reserved words can be one of 3 types: a keyword, a statement, or a modifier.
+
+* `break` Statement to break a loop.
+* `class` Keyword to declare a class.
+* `const` Modifier to mark a variable as immutable.
+* `continue` Statement to skip to the next pass of a loop.
+* `else` Keyword to declare the "else" body of an "if" statement.
+* `false` Literal for boolean false.
+* `for` Keyword to declare a "for" loop.
+* `func` Keyword to declare a function.
+* `if` Keyword to declare a "if" statement.
+* `import` Keyword to use classes and functions from another package.
+* `null` Literal for a null reference.
+* `private` Modifier to mark a field accessible only in the class scope.
+* `public` Modifier to mark a field accessible outside the class scope.
+* `return` Statement to return from a function.
+* `true` Literal for boolean true.
+* `while` Keyword to declare a "while" loop.
 
 In order of precedence:
 

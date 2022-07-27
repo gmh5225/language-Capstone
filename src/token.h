@@ -57,16 +57,12 @@ enum TOKEN_TYPES {
     TOK_R_CLASS,
     TOK_R_PUBLIC,
     TOK_R_PRIVATE,
-    TOK_R_GET,
-    TOK_R_SET,
-    TOK_R_FINAL,
 
-    TOK_R_VAR,
+    // TOK_R_VAR,
 
     TOK_R_TRUE,
     TOK_R_FALSE,
     TOK_R_NULL,
-    TOK_R_NEW,
     TOK_R_CONST,
 
     TOK_R_IMPORT,

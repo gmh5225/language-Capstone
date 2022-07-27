@@ -157,8 +157,6 @@ void Lexer::getNextToken() {
             tk = TOK_R_IF;
         else if (tkStr == "else")
             tk = TOK_R_ELSE;
-        // else if (tkStr == "do")
-        //     tk = TOK_R_DO;
         else if (tkStr == "while")
             tk = TOK_R_WHILE;
         else if (tkStr == "for")
@@ -177,20 +175,12 @@ void Lexer::getNextToken() {
             tk = TOK_R_PUBLIC;
         else if (tkStr == "private")
             tk = TOK_R_PRIVATE;
-        else if (tkStr == "get")
-            tk = TOK_R_GET;
-        else if (tkStr == "set")
-            tk = TOK_R_SET;
-        else if (tkStr == "final")
-            tk = TOK_R_FINAL;
         else if (tkStr == "true")
             tk = TOK_R_TRUE;
         else if (tkStr == "false")
             tk = TOK_R_FALSE;
         else if (tkStr == "null")
             tk = TOK_R_NULL;
-        else if (tkStr == "new")
-            tk = TOK_R_NEW;
         else if (tkStr == "const")
             tk = TOK_R_CONST;
         else if (tkStr == "import")
