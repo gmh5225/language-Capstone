@@ -114,3 +114,7 @@ std::string ContinueStatement::toJSON(void) {
 std::string ReturnStatement::toJSON(void) {
     return "{\"_type\": \"ReturnStatement\",\"expressions\": " + createList(expressions) + "}";
 }
+
+std::string ImportStatement::toJSON(void) {
+    return "{\"_type\": \"ImportStatement\",\"package\": " + nullSafeToString(package) + "}";
+}

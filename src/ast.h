@@ -194,4 +194,12 @@ class ReturnStatement : public Node {
     std::string toJSON(void);
 };
 
+class ImportStatement : public Node {
+  public:              
+    Node* package;
+     
+    ImportStatement(Node* package) : package(package) {}
+    std::string toJSON(void);
+};
+
 #endif

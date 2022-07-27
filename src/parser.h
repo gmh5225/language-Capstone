@@ -15,6 +15,10 @@ class Parser {
     Lexer* lexer;
 
     Node* parseFile(void);
+    Node* parseGlobalScope(void);
+
+    Node* parseImport(void);
+
     Node* parseFuncDecl(void);
     Node* parseVarIdent(void);
     Node* parseTypeIdent(void);

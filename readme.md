@@ -76,6 +76,5 @@ In order of precedence:
 
 * Unary expressions
 * Class declarations
-* Const handling
 * Ternary expressions
 * Multiple declaration

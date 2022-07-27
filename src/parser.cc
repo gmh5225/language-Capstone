@@ -7,8 +7,24 @@ Node* Parser::parse(void) {
 Node* Parser::parseFile(void) {
     std::vector<Node*> nodes;
     while (lexer->tk != TOK_EOF)
-        nodes.push_back(parseFuncDecl());
+        nodes.push_back(parseGlobalScope());
     return new Block(nodes);
+}
+
+Node* Parser::parseGlobalScope(void) {
+    if (lexer->tk == TOK_R_FUNC)
+        return parseFuncDecl();
+    else if (lexer->tk == TOK_R_IMPORT)
+        return parseImport();
+    else
+        return parseBlockOrStatement();
+}
+
+Node* Parser::parseImport(void) {
+    lexer->match(TOK_R_IMPORT);
+    Node* package = parseVarIdent();
+    lexer->match(';');
+    return new ImportStatement(package);
 }
 
 Node* Parser::parseFuncDecl(void) {

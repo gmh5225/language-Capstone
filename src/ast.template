@@ -98,3 +98,7 @@ ContinueStatement {
 ReturnStatement {
     expressions: nodes
 }
+
+ImportStatement {
+    package: node
+}
