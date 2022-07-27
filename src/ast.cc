@@ -35,6 +35,10 @@ static std::string nullSafeToString(Node* node) {
     return node == nullptr ? "null" : node->toJSON();
 }
 
+std::string UnaryOperator::toJSON(void) {
+    return "{\"_type\": \"UnaryOperator\",\"element\": " + nullSafeToString(element) + ",\"op\": \"" + Lexer::getTokenStr(op) + "\"}";
+}
+
 std::string BinaryOperator::toJSON(void) {
     return "{\"_type\": \"BinaryOperator\",\"left\": " + nullSafeToString(left) + ",\"right\": " + nullSafeToString(right) + ",\"op\": \"" + Lexer::getTokenStr(op) + "\"}";
 }

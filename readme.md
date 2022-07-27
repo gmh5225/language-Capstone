@@ -74,7 +74,6 @@ In order of precedence:
 
 ## TODO
 
-* Unary expressions
 * Class declarations
 * Ternary expressions
 * Multiple declaration

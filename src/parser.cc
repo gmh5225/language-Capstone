@@ -279,7 +279,17 @@ Node* Parser::parseAdditive(void) {
 }
 
 Node* Parser::parseMultiplicative(void) {
-    return parseBinaryOperator({'*', '/', '%'}, &Parser::parseElement);
+    return parseBinaryOperator({'*', '/', '%'}, &Parser::parseUnaryExpression);
+}
+
+Node* Parser::parseUnaryExpression(void) {
+    if (lexer->tk == '!' || lexer->tk == '$') {
+        const int op = lexer->tk;
+        lexer->match(lexer->tk);
+        return new UnaryOperator(parseElement(), op);
+    } else
+        return parseElement();
+
 }
 
 Node* Parser::parseElement(void) {

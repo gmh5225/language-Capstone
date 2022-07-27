@@ -16,6 +16,15 @@ static std::string safeLiterals(const std::string& str);
 static std::string nullSafeToString(Node*);
 
 
+class UnaryOperator : public Node {
+  public:              
+    Node* element;
+    int op;
+     
+    UnaryOperator(Node* element, int op) : element(element), op(op) {}
+    std::string toJSON(void);
+};
+
 class BinaryOperator : public Node {
   public:              
     Node* left;

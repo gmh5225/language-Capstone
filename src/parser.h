@@ -57,6 +57,8 @@ class Parser {
     Node* parseAdditive(void);
     Node* parseMultiplicative(void);
 
+    Node* parseUnaryExpression(void);
+
     Node* parseElement(void);
 
     // What in the C++ fuck?
