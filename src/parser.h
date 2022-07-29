@@ -26,7 +26,7 @@ class Parser {
 
     Node* parseClassDecl(void);
     Node* parseClassBody(void);
-    Node* parseClassVisibility(void);
+    Node* parseClassField(void);
     Node* parseClassMember(void);
 
     Node* parseFuncDecl(void);

@@ -38,7 +38,7 @@ Files:
 
 ## Reserved Words
 
-Capstone has *18 + 2* reserved words. Reserved words can be either a keyword, a statement, or a modifier, or multiple.
+Capstone has *19 + 2* reserved words. Reserved words can be either a keyword, a statement, or a modifier, or multiple.
 
 * `break` Statement to break a loop.
 * `class` Keyword to declare a class.
@@ -55,6 +55,7 @@ Capstone has *18 + 2* reserved words. Reserved words can be either a keyword, a 
 * `protected` Modifier to mark a field accessible only in the class and child class scope.
 * `public` Modifier to mark a field accessible outside the class scope.
 * `return` Statement to return from a function.
+* `static` Modifier to mark a field static instead.
 * `true` Literal for boolean true.
 * `var` or `let` Keyword for declaring a mutable variable.
 * `while` Keyword to declare a "while" loop.
@@ -107,35 +108,4 @@ func main(String[] args) u1 {
 ## Current TODO
 
 * Multiple declaration
-
-## Drastic Changes
-
-## Things that may change
-
-### Immutable keyword
-
-`const` vs `final`
-
-### Variable declaration syntax
-
-Current:
-
-```swift
-name: Type = f();   // define mutable
-name: var = f();         // infer mutable
-name: const Type = f(); // define immutable
-name: const var = f();       // infer immutable
-```
-
-Proposed:
-
-```swift
-var name: Type = f();   // define mutable
-var name = f();         // infer mutable
-const name: Type = f(); // define immutable
-const name = f();       // infer immutable
-```
-
-### Immutable parameter declaration syntax
-
-`f(name: const Type)` vs `f(const name: Type)`
+* Enum declaration

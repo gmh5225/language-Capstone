@@ -131,6 +131,6 @@ std::string ClassDeclaration::toJSON(void) {
     return "{\"_type\": \"ClassDeclaration\",\"name\": " + nullSafeToString(name) + ",\"super\": " + nullSafeToString(super) + ",\"body\": " + nullSafeToString(body) + "}";
 }
 
-std::string ClassVisibility::toJSON(void) {
-    return "{\"_type\": \"ClassVisibility\",\"member\": " + nullSafeToString(member) + ",\"visibility\": \"" + std::to_string(visibility) + "\"}";
+std::string ClassField::toJSON(void) {
+    return "{\"_type\": \"ClassField\",\"member\": " + nullSafeToString(member) + ",\"visibility\": \"" + std::to_string(visibility) + "\",\"staticness\": \"" + std::to_string(staticness) + "\"}";
 }

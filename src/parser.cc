@@ -41,26 +41,44 @@ Node* Parser::parseClassDecl(void) {
 Node* Parser::parseClassBody(void) {
     lexer->match('{');
     std::vector<Node*> fields;
-    while (lexer->tk != '}') fields.push_back(parseClassVisibility());
+    while (lexer->tk != '}') fields.push_back(parseClassField());
     lexer->match('}');
     return new Block(fields);
 }
 
-Node* Parser::parseClassVisibility(void) {
+Node* Parser::parseClassField(void) {
+    unsigned int staticness = 0;
     if (lexer->tk == TOK_R_PRIVATE) {
         lexer->match(TOK_R_PRIVATE);
-        return new ClassVisibility(parseClassMember(), 0);
+        if (lexer->tk == TOK_R_STATIC) {
+            lexer->match(TOK_R_STATIC);
+            staticness = 1;
+        }
+        return new ClassField(parseClassMember(), 0, staticness);
     } else if (lexer->tk == TOK_R_PROTECTED) {
         lexer->match(TOK_R_PROTECTED);
-        return new ClassVisibility(parseClassMember(), 1);
+        if (lexer->tk == TOK_R_STATIC) {
+            lexer->match(TOK_R_STATIC);
+            staticness = 1;
+        }
+        return new ClassField(parseClassMember(), 1, staticness);
     } else if (lexer->tk == TOK_R_PUBLIC) {
         lexer->match(TOK_R_PUBLIC);
-        return new ClassVisibility(parseClassMember(), 2);
+        if (lexer->tk == TOK_R_STATIC) {
+            lexer->match(TOK_R_STATIC);
+            staticness = 1;
+        }
+        return new ClassField(parseClassMember(), 2, staticness);
     } else {
-        return new ClassVisibility(parseClassMember(), 0);
-        return parseClassMember();
+         if (lexer->tk == TOK_R_STATIC) {
+            lexer->match(TOK_R_STATIC);
+            staticness = 1;
+        }
+        return new ClassField(parseClassMember(), 0, staticness);
     }
 }
+
+
 
 Node* Parser::parseClassMember(void) {
     if (lexer->tk == TOK_R_FUNC)

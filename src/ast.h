@@ -232,12 +232,13 @@ class ClassDeclaration : public Node {
     std::string toJSON(void);
 };
 
-class ClassVisibility : public Node {
+class ClassField : public Node {
   public:              
     Node* member;
     unsigned int visibility;
+    unsigned int staticness;
      
-    ClassVisibility(Node* member, unsigned int visibility) : member(member), visibility(visibility) {}
+    ClassField(Node* member, unsigned int visibility, unsigned int staticness) : member(member), visibility(visibility), staticness(staticness) {}
     std::string toJSON(void);
 };
 

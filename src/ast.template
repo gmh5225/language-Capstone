@@ -121,7 +121,8 @@ ClassDeclaration {
     body: node
 }
 
-ClassVisibility {
+ClassField {
     member: node
     visibility: count
+    staticness: count
 }

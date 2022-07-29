@@ -174,11 +174,15 @@ void Lexer::getNextToken() {
             tk = TOK_R_PROTECTED;
         else if (tkStr == "private")
             tk = TOK_R_PRIVATE;
+        else if (tkStr == "static")
+            tk = TOK_R_STATIC;
         else if (tkStr == "true")
             tk = TOK_R_TRUE;
         else if (tkStr == "false")
             tk = TOK_R_FALSE;
         else if (tkStr == "null")
+            tk = TOK_R_NULL;
+        else if (tkStr == "nil")
             tk = TOK_R_NULL;
         else if (tkStr == "const")
             tk = TOK_R_CONST;
