@@ -126,3 +126,8 @@ ClassField {
     visibility: count
     staticness: count
 }
+
+EnumDeclaration {
+    name: node
+    parts: nodes
+}

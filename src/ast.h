@@ -242,4 +242,13 @@ class ClassField : public Node {
     std::string toJSON(void);
 };
 
+class EnumDeclaration : public Node {
+  public:              
+    Node* name;
+    std::vector<Node*> parts;
+     
+    EnumDeclaration(Node* name, std::vector<Node*> parts) : name(name), parts(parts) {}
+    std::string toJSON(void);
+};
+
 #endif

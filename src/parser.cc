@@ -20,10 +20,30 @@ Node* Parser::parseGlobalScope(void) {
         return parseFuncDecl();
     else if (lexer->tk == TOK_R_IMPORT)
         return parseImport();
+    else if (lexer->tk == TOK_R_ENUM)
+        return parseEnumDecl();
     else if (lexer->tk == TOK_R_CLASS)
         return parseClassDecl();
     else
         return parseBlockOrStatement();
+}
+
+Node* Parser::parseEnumDecl(void) {
+    lexer->match(TOK_R_ENUM);
+    Node* name = parseTypeIdent();
+    std::vector<Node*> nodes;
+    
+    lexer->match('{');
+    if (lexer->tk != '{') {
+        nodes.push_back(parseVarIdent());
+        while (lexer->tk == ',') {
+            lexer->match(',');
+            nodes.push_back(parseVarIdent());
+        }
+    }
+    lexer->match('}');
+    
+    return new EnumDeclaration(name, nodes);
 }
 
 Node* Parser::parseClassDecl(void) {

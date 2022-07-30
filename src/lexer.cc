@@ -85,7 +85,6 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_RSINGLEARROW: return "->";
     case TOK_RDOUBLEARROW: return "=>";
     case TOK_SPACESHIP: return "<=>";
-    case TOK_GENERIC: return ":<";
 
     case TOK_R_IF: return "if";
     case TOK_R_ELSE: return "else";
@@ -96,6 +95,7 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_FUNC: return "func";
     case TOK_R_RETURN: return "return";
 
+    case TOK_R_ENUM: return "enum";
     case TOK_R_CLASS: return "class";
     case TOK_R_PUBLIC: return "public";
     case TOK_R_PROTECTED: return "protected";
@@ -105,6 +105,8 @@ std::string Lexer::getTokenStr(int token) {
     case TOK_R_FALSE: return "false";
     case TOK_R_NULL: return "null";
     case TOK_R_CONST: return "const";
+    case TOK_R_VAR: return "var";
+
     case TOK_R_IMPORT: return "import";
     }
 
@@ -166,6 +168,8 @@ void Lexer::getNextToken() {
             tk = TOK_R_FUNC;
         else if (tkStr == "return")
             tk = TOK_R_RETURN;
+        else if (tkStr == "enum")
+            tk = TOK_R_ENUM;
         else if (tkStr == "class")
             tk = TOK_R_CLASS;
         else if (tkStr == "public")

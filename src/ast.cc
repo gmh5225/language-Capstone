@@ -134,3 +134,7 @@ std::string ClassDeclaration::toJSON(void) {
 std::string ClassField::toJSON(void) {
     return "{\"_type\": \"ClassField\",\"member\": " + nullSafeToString(member) + ",\"visibility\": \"" + std::to_string(visibility) + "\",\"staticness\": \"" + std::to_string(staticness) + "\"}";
 }
+
+std::string EnumDeclaration::toJSON(void) {
+    return "{\"_type\": \"EnumDeclaration\",\"name\": " + nullSafeToString(name) + ",\"parts\": " + createList(parts) + "}";
+}

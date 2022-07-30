@@ -24,6 +24,8 @@ class Parser {
 
     Node* parseImport(void);
 
+    Node* parseEnumDecl(void);
+
     Node* parseClassDecl(void);
     Node* parseClassBody(void);
     Node* parseClassField(void);

@@ -54,18 +54,20 @@ enum TOKEN_TYPES {
     TOK_R_FUNC,
     TOK_R_RETURN,
 
+    TOK_R_ENUM,
     TOK_R_CLASS,
     TOK_R_STATIC,
     TOK_R_PUBLIC,
     TOK_R_PRIVATE,
     TOK_R_PROTECTED,
 
-    TOK_R_VAR,
 
     TOK_R_TRUE,
     TOK_R_FALSE,
     TOK_R_NULL,
+
     TOK_R_CONST,
+    TOK_R_VAR,
 
     TOK_R_IMPORT,
 
