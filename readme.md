@@ -64,27 +64,43 @@ Capstone has *19 + 2* reserved words. Reserved words can be either a keyword, a 
 
 In order of precedence:
 
-| Type              | Operators                                                |
-| ----------------- | -------------------------------------------------------- |
-| Unary             | `!` [`$`](#size-of)                                      |
-| Multiplicative    | `*` `/` `%`                                              |
-| Additive          | `+` `-`                                                  |
-| Shift             | `<<` `>>`                                                |
-| Relational        | `<` `>` `<=` `>=` [`<=>`](#instance-of)                  |
-| Equality          | `==` `!=`                                                |
-| Bitwise (ordered) | `&` `^` `\|`                                             |
-| Logical (ordered) | `&&` `\|\|`                                              |
-| Ternary           | `? :`                                                    |
-| Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` |
+| Type              | Operators                                                  |
+| ----------------- | ---------------------------------------------------------- |
+| Unary             | `!` [`$`](#size-of) [`#`](#type-of) [`@`](#length-of) `[]` |
+| Multiplicative    | `*` `/` `%`                                                |
+| Additive          | `+` `-`                                                    |
+| Shift             | `<<` `>>`                                                  |
+| Relational        | `<` `>` `<=` `>=` [`<=>`](#instance-of)                    |
+| Equality          | `==` `!=`                                                  |
+| Bitwise (ordered) | `&` `^` `\|`                                               |
+| Logical (ordered) | `&&` `\|\|`                                                |
+| Ternary           | `? :`                                                      |
+| Assignment        | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=`   |
 
 ### Uncommon Operators
 
 #### Size of
 
-The sizeof operator is expressed as the `$` character. It is used to find the size of a variable in ~~bits~~ (this is yet to be determined), returned as an unsigned integer. To store the size of variable `x` into variable `y`, the following code would be employed:
+The sizeof operator is expressed as the `$` character. It is used to find the size of a variable in ~~bits~~ (this is yet to be determined), returned as an unsigned, 32 bit integer (u32). Usage:
 
 ```swift
-y: u16 = $x;
+var x: i32 = 5;
+var y: u32 = $x;
+// y = 32
+```
+
+#### Type of
+
+**This is not finalized to be in the language!** The typeof operator is expressed using the `#` character. It is used to find the data type or class that of a variable. It returns the class.
+
+#### Length of
+
+The length of operator is expressed with the `@` character. It is used to find the length of an array, and returns an unsigned, 32 bit integer (u32). Usage:
+
+```swift
+var x: i32[] = [1, 2, 3, 4, 5];
+var y: u32 = #x;
+// y = 5
 ```
 
 #### Instance of
@@ -96,11 +112,69 @@ class MyObject { }
 
 class AnotherObject { }
 
-func main(String[] args) u1 {
-    x: MyObject = MyObject();
-    y: AnotherObject = AnotherObject();
-    u1 a = x <=> MyObject;
-    u1 b = y <=> MyObject;
+func main(args: String[]) u0 {
+    var x: MyObject = MyObject();
+    var y: AnotherObject = AnotherObject();
+    var a: u1 = x <=> MyObject;
+    var b: u1 = y <=> MyObject;
+}
+
+```
+
+## Builtin Types
+
+### Primatives
+
+Primative datatypes are named using a character specification followed by a numerical size.
+
+| Character | Meaning          | Sizes               |  
+| --------- | ---------------- | ------------------- |
+| i         | Signed integer   | 8, 16, 32, 64       |
+| u         | Unsigned integer | 0, 1, 8, 16, 32, 64 |
+| f         | Floating point   | 16, 32, 64, 128     |
+
+### Type aliases
+
+There are a few semi-reserved words that are builtin aliases for existing types.
+
+| Alias     | Type          | Why                            |  
+| --------- | ------------- | ------------------------------ |
+| void      | u0            | Specifies returning no data    |
+| bool      | u1            | Boolean data                   |
+| char      | u8            | Represents a unicode character |
+
+## Builtin classes
+
+There are two builtin classes: String and Error.
+
+### String
+
+Under the hood, strings are represented as an array of characters: `char[]`. In addition, the String class provides useful methods like the string class in Java or C++. What makes the String class special is that it can:
+
+* be assigned with a string literal
+* uses + for concatanation <!-- TYPO -->
+* uses == for direct comparison <!-- TYPO? -->
+
+### Error
+
+Error handling is done through multiple return similar to a Go. However, the Error class eliminates the ugly nil checking.
+
+```swift
+
+func functionThatCanError(x: i32) (u32, Error) {
+    if (x < 0) return null, Error("Paramter cannot be negative"); // An error with a string argument is a failure.
+    return x, Error(); // An error with no string argument is a success.
+}
+
+func main(args: String[]) void {
+
+    var x, err = functionThatCanError(-5);
+    if (err.failed()) {
+        // handle the error
+    }
+
+    var y, _ = functionThatCanError(-5);
+    // Ignore the error, y will be null
 }
 
 ```

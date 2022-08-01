@@ -395,7 +395,7 @@ Node* Parser::parseMultiplicative(void) {
 }
 
 Node* Parser::parseUnaryExpression(void) {
-    if (lexer->tk == '!' || lexer->tk == '$') {
+    if (lexer->tk == '!' || lexer->tk == '$' || lexer->tk == '#' || lexer->tk == '@') {
         const int op = lexer->tk;
         lexer->match(lexer->tk);
         return new UnaryOperator(parseElement(), op);
@@ -466,6 +466,7 @@ Node* Parser::parseElement(void) {
             return new FunctionCall(name, NULL, params);
         }
     }
+    return nullptr;
 }
 
 Node* Parser::parseBinaryOperator(const int token,
