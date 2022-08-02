@@ -169,14 +169,20 @@ std::vector<std::string> splitStringIntoVector(const std::string& subject,
     return tokens;
 }
 
-std::string replaceAllStringInString(std::string subject,
-                                     const std::string& search,
-                                     const std::string& replace) {
-    size_t pos = 0;
-    while ((pos = subject.find(search, pos)) != std::string::npos) {
-        subject.replace(pos, search.length(), replace);
-        pos += replace.length();
-    }
+// std::string replaceAllStringInString(std::string subject,
+//                                      const std::string& search,
+//                                      const std::string& replace) {
+//     size_t pos = 0;
+//     while ((pos = subject.find(search, pos)) != std::string::npos) {
+//         subject.replace(pos, search.length(), replace);
+//         pos += replace.length();
+//     }
+//     return subject;
+// }
+
+std::string replaceAllStringInString(std::string subject, const std::string& search, const std::string& replace) {
+	for (size_t pos = 0; (pos = subject.find(search, pos)) != std::string::npos; pos += replace.length())
+	    subject.replace(pos, search.length(), replace);
     return subject;
 }
 
